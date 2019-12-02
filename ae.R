@@ -165,17 +165,20 @@ get_system_names <- function(ae, modeltype) {
 }
 
 
+
 #' gets element knowledgerules  from autoecology xml object
 #'
 #' @param ae autoecology xml object
+#' @param modeltype name of modeltype
+#' @param system name of system
 #' @return An xml element knowledge rules
 #' @examples
-get_element_knowledgerule <- function(ae, modeltype, system) {
+#' get_element_knowledgerule(ae = ae, modeltype = "HSI", system = "Voortplanting Barbeel (grindbedden)")
+get_element_knowledgerules <- function(ae, modeltype, system) {
   nametag = ae_xpath_attr_build(".//System", system)
-  get_element_system(ae, "HSI") %>% xml2::xml_parent() %>% xml2::xml_find_first(nametag) 
+  get_element_system(ae, "HSI") %>% xml2::xml_parent() %>% xml2::xml_find_first(nametag) %>%
+    xml2::xml_find_first(".//KnowledgeRules")
 }
-
-
 
 
 
@@ -238,18 +241,7 @@ get_responsecurve_keys <- function(ae, knowledgerule) {
 }
 
 
-#' gets element knowledgerules  from autoecology xml object
-#'
-#' @param ae autoecology xml object
-#' @param modelname name of model
-#' @return An xml element knowledge rules
-#' @examples
-#' get_element_knowledgerule(ae, "testmodel")
-get_element_knowledgerule <- function(ae, knowledgerule) {
-  # check_model_name(modelname) # checkt of responsecurve voorkomt
-  ae %>% 
-  xml_find_all(xpath = ae_xpath_attr_build(knowledgerule_path, knowledgerule))
-}
+
 
 #' gets element response curve  from autoecology xml object
 #'
