@@ -277,11 +277,120 @@ get_element_functionalresponsecurves <- function(ae, myknowledgerule, myresponse
     xml_children() %>% 
     xml_find_all(
       xpath = ae_xpath_attr_build(path = "//ResponseCurve", myresponsecurve)
+      xpath = ae_xpath_attr_build(path = "//ResponseCurve", rcname)
     )
 }
 
+        parameter_df_temp = data.frame(val1 = as.numeric(xml_attr(parameter,"rangemin")), 
+                                       val2 = as.numeric(xml_attr(parameter,"rangemax")),
+                                       val3 = as.numeric(xml_attr(parameter,"HSI")),
+                                       stringsAsFactors = FALSE)
+        parameter_df = bind_rows(parameter_df,parameter_df_temp)            
+      }
+      nr = nr + 1  
+    } 
+  }
+  else if(rule_list$type == "range / categorical"){
+    name_tag = ".//valuesRangeCategorical/parameter"
+    column_names = names(xml_attrs(xml_find_first(rc_element, xpath = name_tag)))
+    for(parameter in list(xml_find_all(rc_element, xpath = name_tag))){
+      if(nr == 0){
+        parameter_df = data.frame(val1 = as.numeric(xml_attr(parameter,"rangemin")), 
+                                  val2 = as.numeric(xml_attr(parameter,"rangemax")),
+                                  val3 = as.character(xml_attr(parameter,"cat")),
+                                  val4 = as.numeric(xml_attr(parameter,"HSI")),
+                                  stringsAsFactors = FALSE)
+      }else{
+        parameter_df_temp = data.frame(val1 = as.numeric(xml_attr(parameter,"rangemin")), 
+                                       val2 = as.numeric(xml_attr(parameter,"rangemax")),
+                                       val3 = as.character(xml_attr(parameter,"cat")),
+                                       val4 = as.numeric(xml_attr(parameter,"HSI")),
+                                       stringsAsFactors = FALSE)
+        parameter_df = bind_rows(parameter_df,parameter_df_temp)            
+      }
+      nr = nr + 1  
+    }   
+  }else{
+    stop(paste("type ",as.character(rule_list$type)," is not available.", sep = ""))
+  }
+  colnames(parameter_df) <- column_names
+  rule_list$rule = parameter_df
+  return(rule_list)
+}
 
 
+#' gets data formula based  from autoecology xml object
+#'
+#' @param ae autoecology xml object
+#' @param fb_element a formula based element
+#' @return An xml element knowledge rules
+#' @examples
+#' get_data_formula_based(fbelement)
+get_data_formula_based <- function(fb_element){
+  rule_list = list()
+  
+  rule_list$name = fb_element  %>% xml_attr("name")
+  rule_list$KnowledgeruleCategorie = "FormulaBased"
+  #rule_list$type = fb_element %>% xml_child(search = "type") %>% xml_text(trim = TRUE)
+  rule_list$layername = fb_element %>% xml_child(search = "layername") %>% xml_text(trim = TRUE)
+  rule_list$unit = fb_element %>% xml_child(search = "unit") %>% xml_text(trim = TRUE)
+  rule_list$statistic = fb_element %>% xml_child(search = "statistic") %>% xml_text(trim = TRUE) 
+  rule_list$output = fb_element %>% xml_child(search = "output") %>% xml_text(trim = TRUE) 
+  rule_list$equation_text = fb_element %>% xml_child(search = "equation") %>% xml_text(trim = TRUE)
+  
+  nr = 0
+  name_tag_scal = ".//Parameters/valuesScalar"
+  name_tag_cons = ".//Parameters/valuesConstant"
+  fb_values_tags = c(xml_find_all(fb_element, xpath = name_tag_scal), 
+                     xml_find_all(fb_element, xpath = name_tag_cons))
+  
+  for(values in fb_values_tags){
+    parameter_list = list()
+    parameter_list$dataname = values %>% xml_attr("dataname")
+    parameter_list$type = values %>% xml_attr("type")
+    parameter_list$unit = values %>% xml_attr("unit")
+    nr = 0
+    
+    if(parameter_list$type == "constant"){
+      column_names = names(xml_attrs(xml_find_first(fb_element, xpath = ".//parameter")))
+      for(parameter in xml_find_all(values, ".//parameter")){
+        if(nr == 0){
+          parameter_df = data.frame(val1 = as.character(xml_attr(parameter,"constantset")), 
+                                    val2 = as.numeric(xml_attr(parameter,"value")),
+                                    stringsAsFactors = FALSE)
+        }else{
+          parameter_df_temp = data.frame(val1 = as.character(xml_attr(parameter,"constantset")), 
+                                         val2 = as.numeric(xml_attr(parameter,"value")),
+                                         stringsAsFactors = FALSE)
+          parameter_df = bind_rows(parameter_df,parameter_df_temp)            
+        }
+        nr = nr + 1  
+      }
+    }else if(parameter_list$type == "scalar"){
+      column_names = names(xml_attrs(xml_find_first(fb_element, xpath = ".//parameter")))
+      for(parameter in xml_find_all(values, ".//parameter")){
+        if(nr == 0){
+          parameter_df = data.frame(val1 = as.numeric(xml_attr(parameter,"min")), 
+                                  val2 = as.numeric(xml_attr(parameter,"max")),
+                                  stringsAsFactors = FALSE)
+        }else{
+          parameter_df_temp = data.frame(val1 = as.numeric(xml_attr(parameter,"min")), 
+                                       val2 = as.numeric(xml_attr(parameter,"max")),
+                                       stringsAsFactors = FALSE)
+          parameter_df = bind_rows(parameter_df,parameter_df_temp)            
+        }
+        nr = nr + 1
+      }
+    }else{
+      stop(paste("type ",as.character(parameter_list$type)," is not available.", sep = ""))
+    }
+    colnames(parameter_df) <- column_names
+    parameter_list$data = parameter_df
+    rule_list$parameters = c(rule_list$parameters,list(parameter_list))
+  }
+  
+  return(rule_list)
+}
 
 
 #' gets element model description from autoecology xml object

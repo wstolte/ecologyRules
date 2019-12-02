@@ -395,12 +395,47 @@ server <- function(input, output, session) {
     paste("you have selected", species)
       })
   
+  
+
+  # output$boxes <- renderUI({
+  #   req(actual_knowledge_rules_df())
+  #   names = unname(unlist(actual_knowledge_rules_df()[,1]))
+  #   types = unname(unlist(actual_knowledge_rules_df()[,2]))
+  #   nrBoxes = dim(actual_knowledge_rules_df())[1]
+  #   
+  #   vizboxes <- list()
+  #   for(a in 1:nrBoxes) {
+  #     x = 1:100
+  #     vizboxes[[a]] <- 
+  #       box(
+  #         title = paste0("box ", names[a]), 
+  #         renderPlot(plot(x = x, y = x^2)),
+  #         collapsible = T,
+  #         collapsed = T,
+  #         footer = types[a]
+  #       )
+  #   }
+  #   
+  # })
+  
+  
+  
+
   output$boxes <- renderUI({
-    lapply(1:10, function(a) {
+    req(actual_knowledge_rules_df())
+    names =as.list(unlist(unname(actual_knowledge_rules_df()[,1])))
+    # types = actual_knowledge_rules_df()[,2]
+    # nrBoxes = dim(actual_knowledge_rules_df())[1]
+
+    b <- lapply(names, function(a) {
       x = 1:100
       box(
-        title = paste0("box ", a), 
-        renderPlot(plot(x = x, y = x^a)))
+        title = paste0("box ", a),
+        renderPlot(plot(x = x, y = x^2)),
+        collapsible = T,
+        collapsed = T
+        # footer = types[a]
+      )
     })
   })
   
