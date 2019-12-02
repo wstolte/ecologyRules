@@ -6,6 +6,7 @@ knowldedgeRuleDir <- "data/_knowledgerules"
 
 # schema <- xml2::read_xml("n:/Projects/11203500/11203758/B. Measurements and calculations/005- habitat modeling/EcologischeDatabase/github_setup/XMLSchema/AutecologyXML.xsd")
 testfile = file.path(knowldedgeRuleDir, "species", "Fish", "Barbus barbus.xml")
+testfile = file.path(knowldedgeRuleDir, "species", "Macrofytes", "Chara spp.xml")
 # n:\Projects\11203500\11203758\B. Measurements and calculations\005- habitat modeling\EcologischeDatabase\github_setup\_knowledgerules\species\Macrofytes\Chara spp.xml
 # d:\Projects\EcologischeKennisregels\ecoRules\data\_knowledgerules\species\Fish\Barbus barbus.xml
 
@@ -24,8 +25,20 @@ get_element_ModelTypeNames(ae)
 get_system_names(ae, "HSI")
 get_element_system(ae, "HSI")
 
+system = get_element_system(ae, "HSI")[[2]] %>% xml2::xml_attrs() %>% unlist() %>% unname()
 
-get_element_knowledgerule(ae = ae, modeltype = "HSI", system = "Voortplanting Barbeel (grindbedden)")
+get_element_knowledgerules(ae = ae, modeltype = "HSI", system = system) 
+get_element_knowledgerules(ae = ae, modeltype = "HSI", system = system) %>%
+xml2::xml_children() %>% xml2::xml_attrs() %>% unlist() %>% unname()
+
+get_all_knowledgeruleNames(ae = ae, modeltype = "HSI", system = system) %>% data.frame()
+
+
+get_type_knowledgeruleNames(ae = ae, modeltype = "HSI", system = system) 
+
+
+
+#=================================================
 
 
 #  //ResponseCurve[@*[contains(.,\"NA\")]]

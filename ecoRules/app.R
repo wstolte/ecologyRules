@@ -198,7 +198,7 @@ body    <- dashboardBody(
                   p("Choose the elements that you want to visualize."),
                   uiOutput(outputId = "modelType"),
                   uiOutput(outputId = "systems"),
-                  uiOutput(outputId = "knowledgeRule")
+                  tableOutput(outputId = "knowledgeRuleNames")
               ),
              
               
@@ -236,18 +236,16 @@ body    <- dashboardBody(
     ##========= abiotiek bekijken pagina ============================
     tabItem(tabName = "visualize",
             fluidRow(
-              box(title = "visualize", 
-                  # textOutput("selected_soortgroep_abio"), 
-                  width = 12,
-                  solidHeader = T, 
-                  # background = "green",
-                  status = "success"),
               tabBox(title = NULL,
                      width = 12,
                      side = "left",
                      # selected = "Huidige monitordata",
                      tabPanel("Knowledge rules",  
-                              p("Presentation of knowledge rules")
+                              p("Presentation of knowledge rules"),
+                              fluidRow(
+                                uiOutput("boxes")
+                              )
+                              
                      ),
                      tabPanel("something ",
                               p("Something is presented here")
@@ -366,29 +364,46 @@ server <- function(input, output, session) {
   # knowledgerule
   # formulabased OR responsecurve
   
-  output$knowledgeRule <- renderUI({
-    req(actual_ae(), input$system)
-    choice_of_rules <- get_element_knowledgerules(actual_ae(), input$modeltype, input$system) %>%  xml2::xml_children() %>% xml2::xml_attrs() %>% unlist() %>% unname()
-    selectInput("rule", "choose knowledge rule:", choice_of_rules)
+  output$knowledgeRuleNames <- renderTable({
+    req(actual_ae(), input$system, input$modeltype)
+    get_type_knowledgeruleNames(ae = actual_ae(), modeltype = input$modeltype, system = input$system)
+    
   })
   
-  output$relation <- renderUI({
-    req(actual_ae(), input$system, input$rule)
-    choice_of_relation <- get_element_knowledgerules(actual_ae()) %>%  
-      xml2::xml_children() %>% 
-      xml2::xml_attrs() %>% unlist() %>% unname()
-  })
+  # output$relation <- renderUI({
+  #   req(actual_ae(), input$system, input$rule)
+  #   choice_of_relation <- get_element_knowledgerules(actual_ae()) %>%  
+  #     xml2::xml_children() %>% 
+  #     xml2::xml_attrs() %>% unlist() %>% unname()
+  # })
   
   
   ##== OUTPUT =========================================
 
 
+  actual_knowledge_rules_df <- reactive({
+    req(actual_ae(), input$system, input$modeltype)
+    get_type_knowledgeruleNames(ae = actual_ae(), modeltype = input$modeltype, system = input$system)
+    
+  })
+  
+  
   
   output$AE_summary <- renderText({
     req(actual_ae())
     species <- get_element_species(actual_ae()) %>% xml2::xml_find_first("LatName") %>% as_list() %>% unlist()
     paste("you have selected", species)
       })
+  
+  output$boxes <- renderUI({
+    lapply(1:10, function(a) {
+      x = 1:100
+      box(
+        title = paste0("box ", a), 
+        renderPlot(plot(x = x, y = x^a)))
+    })
+  })
+  
   
 
   # output$AE_summary <- renderText({

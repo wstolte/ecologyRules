@@ -49,6 +49,7 @@ model_path_spec             = ".//KnowledgeRule/Model"
 #=====================================================================================
 
 require(tidyverse)
+require(purrr)
 require(xml2)
 
 extract_names <- function(dd) {
@@ -180,7 +181,33 @@ get_element_knowledgerules <- function(ae, modeltype, system) {
     xml2::xml_find_first(".//KnowledgeRules")
 }
 
+get_all_knowledgeruleNames <- function(ae, modeltype, system){
+get_element_knowledgerules(ae = ae, modeltype = "HSI", system = system) %>%
+  xml2::xml_children() %>% xml2::xml_attrs() %>% unlist() %>% unname()
+}
 
+get_type_knowledgeruleNames <- function(ae, modeltype, system){
+  
+  if(!purrr::is_empty(get_element_knowledgerules(ae = ae, modeltype = modeltype, system = system) %>% xml2::xml_find_all(".//FormulaBased") %>% xml2::xml_attrs())){
+    FB <- get_element_knowledgerules(ae = ae, modeltype = modeltype, system = system) %>% xml2::xml_find_all(".//FormulaBased") %>% xml2::xml_attrs() %>%
+      unlist() %>% unname() %>% tibble(name = .) %>% mutate(type = "FormulaBased")
+  } 
+    
+  if(!purrr::is_empty(get_element_knowledgerules(ae = ae, modeltype = modeltype, system = system) %>% xml2::xml_find_all(".//ResponseCurve") %>% xml2::xml_attrs())){
+    RC <- get_element_knowledgerules(ae = ae, modeltype = modeltype, system = system) %>% xml2::xml_find_all(".//ResponseCurve") %>% xml2::xml_attrs() %>%
+      unlist() %>% unname() %>% tibble(name = .) %>% mutate(type = "ResponseCurve")
+  } 
+  if(!exists("FB") & !exists("RC")) return(NULL) else
+    if(exists("FB") & exists("RC")) return(FB %>% bind_rows(RC)) else 
+      if(exists("FB")) return(FB) else if(exists("RC")) return(RC)
+}
+
+
+
+# get_formulaBasedNames <- function(ae, modeltype, system){
+#   get_element_knowledgerules(ae = ae, modeltype = "HSI", system = "Voortplanting Barbeel (grindbedden)") %>%
+#     xml2::xml_children() %>% xml2::xml_attrs() %>% unlist() %>% unname()
+# }
 
 
 
