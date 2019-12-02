@@ -271,8 +271,18 @@ get_responsecurve_keys <- function(ae, knowledgerule) {
 
 
 get_element_functionalresponsecurves <- function(ae, myknowledgerule, myresponsecurve){
+#' gets element response curve  from autoecology xml object
+#'
+#' @param ae autoecology xml object
+#' @param systemname name of system
+#' @param rcname name of response curve
+#' @return An xml element knowledge rules
+#' @examples
+#' get_element_response_curve(ae, "testmodel","testresponsecurve")
+get_element_response_curve <- function(ae, systemname, rcname){
   ae %>%
     get_element_knowledgerule(myknowledgerule) %>% 
+    get_element_knowledgerule(systemname) %>% 
     xml_child(search = "Model") %>%
     xml_children() %>% 
     xml_find_all(
@@ -281,6 +291,86 @@ get_element_functionalresponsecurves <- function(ae, myknowledgerule, myresponse
     )
 }
 
+#' gets element formula based  from autoecology xml object
+#'
+#' @param ae autoecology xml object
+#' @param systemname name of system
+#' @param fbname name of formula based
+#' @return An xml element knowledge rules
+#' @examples
+#' get_element_formula_based(ae, "testmodel","testformulabased")
+get_element_formula_based <- function(ae, systemname, fbname){
+  ae %>%
+    get_element_knowledgerule(systemname) %>% 
+    xml_child(search = "Model") %>%
+    xml_children() %>% 
+    xml_find_all(
+      xpath = ae_xpath_attr_build(path = "//FormulaBased", fbname)
+    )
+}
+
+#' gets data response curve  from autoecology xml object
+#'
+#' @param ae autoecology xml object
+#' @param rc_element a response curve element
+#' @return An xml element knowledge rules
+#' @examples
+#' get_data_response_curve(rc_element)
+get_data_response_curve <- function(rc_element){
+  rule_list = list()
+  
+  rule_list$name = rc_element  %>% xml_attr("name")
+  rule_list$KnowledgeruleCategorie = "ResponseCurve"
+  rule_list$type = rc_element %>% xml_child(search = "type") %>% xml_text(trim = TRUE)
+  rule_list$layername = rc_element %>% xml_child(search = "layername") %>% xml_text(trim = TRUE)
+  rule_list$unit = rc_element %>% xml_child(search = "unit") %>% xml_text(trim = TRUE)
+  rule_list$statistic = rc_element %>% xml_child(search = "statistic") %>% xml_text(trim = TRUE) 
+  
+  nr = 0
+  if(rule_list$type == "scalar"){
+    name_tag = ".//valuesScalar/parameter"
+    column_names = names(xml_attrs(xml_find_first(rc_element, xpath = name_tag)))
+    for(parameter in list(xml_find_all(rc_element, xpath = name_tag))){
+      if(nr == 0){
+        parameter_df = data.frame(val1 = as.numeric(xml_attr(parameter,"value")), 
+                                val2 = as.numeric(xml_attr(parameter,"HSI")),
+                                stringsAsFactors = FALSE)
+      }else{
+        parameter_df_temp = data.frame(val1 = as.numeric(xml_attr(parameter,"value")), 
+                                  val2 = as.numeric(xml_attr(parameter,"HSI")),
+                                  stringsAsFactors = FALSE)
+        parameter_df = bind_rows(parameter_df,parameter_df_temp)            
+      }
+      nr = nr + 1  
+    }
+  }
+  else if(rule_list$type == "categorical"){
+    name_tag = ".//valuesCategorical/parameter"
+    column_names = names(xml_attrs(xml_find_first(rc_element, xpath = name_tag)))
+    for(parameter in list(xml_find_all(rc_element, xpath = name_tag))){
+      if(nr == 0){
+        parameter_df = data.frame(val1 = as.character(xml_attr(parameter,"cat")), 
+                                  val2 = as.numeric(xml_attr(parameter,"HSI")),
+                                  stringsAsFactors = FALSE)
+      }else{
+        parameter_df_temp = data.frame(val1 = as.character(xml_attr(parameter,"cat")), 
+                                       val2 = as.numeric(xml_attr(parameter,"HSI")),
+                                       stringsAsFactors = FALSE)
+        parameter_df = bind_rows(parameter_df,parameter_df_temp)            
+      }
+      nr = nr + 1  
+    }
+  }
+  else if(rule_list$type == "ranges"){
+    name_tag = ".//valuesRanges/parameter"
+    column_names = names(xml_attrs(xml_find_first(rc_element, xpath = name_tag)))
+    for(parameter in list(xml_find_all(rc_element, xpath = name_tag))){
+      if(nr == 0){
+        parameter_df = data.frame(val1 = as.numeric(xml_attr(parameter,"rangemin")), 
+                                  val2 = as.numeric(xml_attr(parameter,"rangemax")),
+                                  val3 = as.numeric(xml_attr(parameter,"HSI")),
+                                  stringsAsFactors = FALSE)
+      }else{
         parameter_df_temp = data.frame(val1 = as.numeric(xml_attr(parameter,"rangemin")), 
                                        val2 = as.numeric(xml_attr(parameter,"rangemax")),
                                        val3 = as.numeric(xml_attr(parameter,"HSI")),

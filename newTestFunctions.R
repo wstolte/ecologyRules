@@ -3,10 +3,18 @@ source("ae.R")
 
 knowldedgeRuleDir <- "n:/Projects/11203500/11203758/B. Measurements and calculations/005- habitat modeling/EcologischeDatabase/github_setup/_knowledgerules"
 knowldedgeRuleDir <- "data/_knowledgerules"
+knowledgeRuleDir <- "d:\\Projects\\check_outs\\KnowledgeRules\\_knowledgerules\\"
+#knowldedgeRuleDir <- "data/_knowledgerules"
 
 # schema <- xml2::read_xml("n:/Projects/11203500/11203758/B. Measurements and calculations/005- habitat modeling/EcologischeDatabase/github_setup/XMLSchema/AutecologyXML.xsd")
+<<<<<<< HEAD
 testfile = file.path(knowldedgeRuleDir, "species", "Fish", "Barbus barbus.xml")
 testfile = file.path(knowldedgeRuleDir, "species", "Macrofytes", "Chara spp.xml")
+=======
+#testfile = file.path(knowledgeRuleDir, "species", "Fish", "Barbus barbus.xml")
+#testfile = file.path(knowledgeRuleDir, "species", "Molluscs","Dreissena_polymorpha.xml")
+testfile = file.path(knowledgeRuleDir, "species", "Macrophytes","Chara spp.xml")
+>>>>>>> 1b49a44166e966cb17f96da77a425cf61cdcd760
 # n:\Projects\11203500\11203758\B. Measurements and calculations\005- habitat modeling\EcologischeDatabase\github_setup\_knowledgerules\species\Macrofytes\Chara spp.xml
 # d:\Projects\EcologischeKennisregels\ecoRules\data\_knowledgerules\species\Fish\Barbus barbus.xml
 
@@ -35,7 +43,16 @@ get_all_knowledgeruleNames(ae = ae, modeltype = "HSI", system = system) %>% data
 
 
 get_type_knowledgeruleNames(ae = ae, modeltype = "HSI", system = system) 
+a <- get_type_knowledgeruleNames(ae = ae, modeltype = "HSI", system = system) 
+class(a)
+dim(a)[1]
+a[,2]
+names = a[,1]
 
+lapply(1:5, function(a) {
+  x = 1:100
+    names[a]
+})
 
 
 #=================================================
@@ -90,6 +107,29 @@ get_knowledgerule_attributes(ae)
 get_knowledgerule_stage(ae)
 get_responsecurve_keys(ae, "testmodel") #is dit de bedoeling?
 
+
+
+#####################MARC##########################
+
+system_names = get_element_ModelType(ae) %>% xml2::xml_find_all(xpath = "System") %>% 
+                xml_attr(attr = "name")
+system = get_element_ModelType(ae) %>% xml2::xml_find_all(xpath = "System")
+knowledgeRules = system[[1]] %>% xml2::xml_find_first(xpath = "KnowledgeRules")
+#response_curve = get_element_response_curve(ae, "adult", "Chloride")
+#response_curve = system[[1]] %>% xml2::xml_find_first(xpath = ".//KnowledgeRules/ResponseCurve")
+data_response_curve = get_data_response_curve(response_curve)
+
+formula_based = system[[1]] %>% xml2::xml_find_all(xpath = ".//KnowledgeRules/FormulaBased")     
+data_formula_based = get_data_formula_based(formula_based[[2]])
+
+
+
+
+
+
+
+
+###############MARC##############################
 # change to real values
 myknowledgerule = "testmodel"
 myresponsecurve = get_responsecurve_keys(ae, "testmodel")[2]
