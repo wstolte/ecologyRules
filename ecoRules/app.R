@@ -234,7 +234,7 @@ body    <- dashboardBody(
             )
     ),
     
-    ##========= abiotiek bekijken pagina ============================
+     ##========= visualization ============================
     tabItem(tabName = "visualize",
             fluidRow(
               tabBox(title = NULL,
@@ -249,6 +249,7 @@ body    <- dashboardBody(
                               
                      ),
                      tabPanel("something else",
+                              tableOutput("dummy"),
                               p("Something is presented here")
                      )))),
     
@@ -399,21 +400,66 @@ server <- function(input, output, session) {
   
 
   
+  all_knowledgerules_data <- reactive({
+    req(actual_ae(), input$system, input$modeltype)
+    mySystem <- get_element_knowledgerules(ae = actual_ae(), modeltype = input$modeltype, system = input$system) %>% xml2::xml_parent()
+    response_curve = mySystem %>% xml2::xml_find_all(xpath = ".//KnowledgeRules/ResponseCurve")
+    formula_based = mySystem %>% xml2::xml_find_all(xpath = ".//KnowledgeRules/FormulaBased")
+
+    if(length(response_curve) == 0){
+      all_data_response_curve <- NULL} else {
+        all_data_response_curve = lapply(response_curve, get_data_response_curve)
+      }
+    if(length(formula_based) == 0){
+      all_data_formula_based <- NULL} else {
+        all_data_formula_based = lapply(formula_based, get_data_formula_based)
+      }
+    data = c(all_data_response_curve, all_data_formula_based)
+    return(data)
+  })
+  
+  
+  output$dummy <- renderTable({
+    map(all_knowledgerules_data(), list("rule")) %>% as.data.frame()
+  })
+  
 
   output$boxes <- renderUI({
-    req(actual_knowledge_rules_df())
-    ruleList <- split(actual_knowledge_rules_df(), actual_knowledge_rules_df()$name)
+    req(all_knowledgerules_data()) # is al list in goede format
+    # ruleList <- split(actual_knowledge_rules_df(), actual_knowledge_rules_df()$name)
 
-    b <- lapply(ruleList, function(a) {
+    b <- lapply(all_knowledgerules_data(), function(a) {
       x = 1:100
+      name = a$name
+      type = a$type
+      data = a$rule
       box(
-        title = paste0(a$name, " - ", a$type),
-        renderPlot(plot(x = x, y = x^2)),
+        width = 12,
+        title = paste0(name, " - ", type),
+        renderTable(data),
         collapsible = T,
         collapsed = T
       )
     })
+        tagList(b)
   })
+  
+  # working backup
+  # output$boxes <- renderUI({
+  #   req(actual_knowledge_rules_df())
+  #   ruleList <- split(actual_knowledge_rules_df(), actual_knowledge_rules_df()$name)
+  # 
+  #   b <- lapply(ruleList, function(a) {
+  #     x = 1:100
+  #     box(
+  #       title = paste0(a$name, " - ", a$type),
+  #       renderPlot(plot(x = x, y = x^2)),
+  #       collapsible = T,
+  #       collapsed = T
+  #     )
+  #   })
+  #   tagList(b)
+  # })
   
   
 

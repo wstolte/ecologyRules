@@ -1,0 +1,23 @@
+{
+    "collab_server" : "",
+    "contents" : "",
+    "created" : 1575363249510.000,
+    "dirty" : false,
+    "encoding" : "",
+    "folds" : "",
+    "hash" : "0",
+    "id" : "B26C978D",
+    "lastKnownWriteTime" : 28429436511912018,
+    "last_content_update" : 1575363249510,
+    "path" : null,
+    "project_path" : null,
+    "properties" : {
+        "id" : "7dc76b7643bb4238b40ca54160a5c72c",
+        "name" : "all_data_formula_based",
+        "title" : "all_data_formula_based"
+    },
+    "relative_order" : 5,
+    "source_on_save" : false,
+    "source_window" : "",
+    "type" : "object_explorer"
+}
