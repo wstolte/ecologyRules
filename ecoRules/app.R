@@ -1,7 +1,7 @@
 ###########################################################
 # Ecorules RShiny interface                               #
 #                                                         #
-# Auteurs: Lilith Kramer                                  #
+# Auteurs: Willem Stolte                                  #
 #                                                         #
 #                                                         #
 #                                                         #
@@ -198,6 +198,7 @@ body    <- dashboardBody(
                   p("Choose the elements that you want to visualize."),
                   uiOutput(outputId = "modelType"),
                   uiOutput(outputId = "systems"),
+                  p("recognized knowledge rules:"),
                   tableOutput(outputId = "knowledgeRuleNames")
               ),
              
@@ -247,7 +248,7 @@ body    <- dashboardBody(
                               )
                               
                      ),
-                     tabPanel("something ",
+                     tabPanel("something else",
                               p("Something is presented here")
                      )))),
     
@@ -381,6 +382,7 @@ server <- function(input, output, session) {
   ##== OUTPUT =========================================
 
 
+  ## Levert namen en types van alle regels
   actual_knowledge_rules_df <- reactive({
     req(actual_ae(), input$system, input$modeltype)
     get_type_knowledgeruleNames(ae = actual_ae(), modeltype = input$modeltype, system = input$system)
@@ -395,46 +397,20 @@ server <- function(input, output, session) {
     paste("you have selected", species)
       })
   
-  
 
-  # output$boxes <- renderUI({
-  #   req(actual_knowledge_rules_df())
-  #   names = unname(unlist(actual_knowledge_rules_df()[,1]))
-  #   types = unname(unlist(actual_knowledge_rules_df()[,2]))
-  #   nrBoxes = dim(actual_knowledge_rules_df())[1]
-  #   
-  #   vizboxes <- list()
-  #   for(a in 1:nrBoxes) {
-  #     x = 1:100
-  #     vizboxes[[a]] <- 
-  #       box(
-  #         title = paste0("box ", names[a]), 
-  #         renderPlot(plot(x = x, y = x^2)),
-  #         collapsible = T,
-  #         collapsed = T,
-  #         footer = types[a]
-  #       )
-  #   }
-  #   
-  # })
-  
-  
   
 
   output$boxes <- renderUI({
     req(actual_knowledge_rules_df())
-    names =as.list(unlist(unname(actual_knowledge_rules_df()[,1])))
-    # types = actual_knowledge_rules_df()[,2]
-    # nrBoxes = dim(actual_knowledge_rules_df())[1]
+    ruleList <- split(actual_knowledge_rules_df(), actual_knowledge_rules_df()$name)
 
-    b <- lapply(names, function(a) {
+    b <- lapply(ruleList, function(a) {
       x = 1:100
       box(
-        title = paste0("box ", a),
+        title = paste0(a$name, " - ", a$type),
         renderPlot(plot(x = x, y = x^2)),
         collapsible = T,
         collapsed = T
-        # footer = types[a]
       )
     })
   })
