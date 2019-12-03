@@ -270,7 +270,6 @@ get_responsecurve_keys <- function(ae, knowledgerule) {
 
 
 
-get_element_functionalresponsecurves <- function(ae, myknowledgerule, myresponsecurve){
 #' gets element response curve  from autoecology xml object
 #'
 #' @param ae autoecology xml object
@@ -281,12 +280,10 @@ get_element_functionalresponsecurves <- function(ae, myknowledgerule, myresponse
 #' get_element_response_curve(ae, "testmodel","testresponsecurve")
 get_element_response_curve <- function(ae, systemname, rcname){
   ae %>%
-    get_element_knowledgerule(myknowledgerule) %>% 
     get_element_knowledgerule(systemname) %>% 
     xml_child(search = "Model") %>%
     xml_children() %>% 
     xml_find_all(
-      xpath = ae_xpath_attr_build(path = "//ResponseCurve", myresponsecurve)
       xpath = ae_xpath_attr_build(path = "//ResponseCurve", rcname)
     )
 }
