@@ -30,7 +30,7 @@ get_element_system(ae, "HSI")
 
 mySystem = get_element_system(ae, "HSI")[[1]] %>% xml2::xml_attrs() %>% unlist() %>% unname()
 
-get_element_knowledgerules(ae = ae, modeltype = "HSI", system = mySystem) 
+get_element_knowledgerules(ae = ae, modeltype = "HSI", system = mySystem)
 get_element_knowledgerules(ae = ae, modeltype = "HSI", system = mySystem) %>%
 xml2::xml_children() %>% xml2::xml_attrs() %>% unlist() %>% unname()
 
@@ -53,10 +53,12 @@ a <- get_type_knowledgeruleNames(ae = ae, modeltype = "HSI", system = mySystem)
 
 # zoeken op basis van attribuutwaarden
 xml2::xml_find_first(ae, ".//Autecology/ModelType[@*[contains(.,\"HSI\")]]")
+
 HSIpath <- ae_xpath_attr_build(".//Autecology/ModelType","HSI")
 xml2::xml_find_first(ae, HSIpath)
 
 xml2::xml_find_first(ae, ".//Autecology/ModelType/System[@*[contains(.,\"Voortplanting\")]]")
+
 systempath <- ae_xpath_attr_build(".//Autecology/ModelType/System","Voortplanting")
 xml2::xml_find_first(ae, systempath)
 
@@ -67,7 +69,7 @@ nametag = ae_xpath_attr_build(".//Autecology/ModelType/System", mySystem)
 xml2::xml_find_first(ae, nametag)
 
 nametag2 = ae_xpath_attr_build(".//System", mySystem)
-get_element_system(ae, "HSI") %>% xml2::xml_parent() %>% xml2::xml_find_first(nametag2) 
+get_element_system(ae, "HSI") %>% xml2::xml_parent() %>% xml2::xml_find_first(nametag2)  %>% View()
 
 
 xml2::xml_find_all(ae, ".//Autecology/ModelType/System")
@@ -104,10 +106,12 @@ system_names = get_element_ModelType(ae) %>% xml2::xml_find_all(xpath = "System"
 system = get_element_ModelType(ae) %>% xml2::xml_find_all(xpath = "System")
 knowledgeRules = system[[1]] %>% xml2::xml_find_first(xpath = "KnowledgeRules")
 # response_curve = get_element_response_curve(ae, "adult", "Chloride")
-response_curve = system[[1]] %>% xml2::xml_find_first(xpath = ".//KnowledgeRules/ResponseCurve")
-
-formula_based = system[[1]] %>% xml2::xml_find_all(xpath = ".//KnowledgeRules/FormulaBased")     
-data_formula_based = get_data_formula_based(formula_based)
+system[[1]]
+mySystem <- get_element_knowledgerules(ae = ae, modeltype = "HSI", system = system_names[1]) %>% xml2::xml_parent()
+response_curve = mySystem %>% xml2::xml_find_all(xpath = ".//KnowledgeRules/ResponseCurve")
+formula_based = mySystem %>% xml2::xml_find_all(xpath = ".//KnowledgeRules/FormulaBased")     
+length(formula_based) == 0
+is.na(response_curve)
 
 if(length(response_curve) == 0){
   all_data_response_curve <- NULL} else {
@@ -119,6 +123,13 @@ if(length(formula_based) == 0){
   }
 data = c(all_data_response_curve, all_data_formula_based)
 View(data)
+str(data)
+lapply(data, function(a) a$rule)
+
+map(data, list("name")) %>% unlist() %>% unname()
+map(data, list("type")) %>% unlist() %>% unname()
+map(data, list("rule")) %>% as.data.frame()
+print(head(data[[1]]$rule))
 
 
 all_data_formula_based = lapply(formula_based, get_data_formula_based)

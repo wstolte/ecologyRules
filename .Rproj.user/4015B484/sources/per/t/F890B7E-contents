@@ -1,0 +1,177 @@
+---
+title: "ecoRules Plan"
+author: "Deltares"
+date: "2 October 2019"
+output: html_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+
+# Aim of application
+
+Bekijken kennisregels
+
+
+# Functional description
+
+XML openen (vast formaat, maar nu nog niet uitgekristallisserd). Namen kunnen nog veranderen. Structuur aan het begin declareren zodat namen niet hardgecodeerd zijn. 
+
+
+## Logica van keuzes
+
+* choice of file from database
+    + level 1 (species, wfd, etc)
+    + level 2 (species groups)
+    + level 3 (species)
+* choice of elements in file
+    + model type (bijv HSI)
+    + system (bijv voortplanting)
+      + has scope
+      + has knowledgerules
+    + Knowledge rules
+      + ResponseCurve or FormulaBased (show all in different boxes)
+        + If response curve: 
+          + scalar
+            + valuesScalar
+          + categorical
+            + valuesCategorical
+          + range/categorical
+            + valuesRangeCategorical (max, min, cat)
+          + ranges
+            + valuesRange
+            Plot
+        + if FormulaBased:
+          + choose parameters, choose variable (x)
+           valuesConstant
+           valuesScalar
+
+
+
+## functions
+  makeCatalogue() # kijkt voor welke soorten er modellen zijn. DAta uit files (wetenschappelijke naam, NL naam, GB naam bijv. ) regelmatig maken en wegschrijven als text csv of zo
+  
+* readEcoruleXML(filename)
+  + input: filename
+  + output: named list object with xml information
+    
+* models(ecoRuleList)
+  + ecoRuleModelNames: list of model names (with some metadata?)
+
+* getModel(ecoRuleList, ecoRuleModelName)
+  + output: ecoRuleModel (subset of named ecoRuleList)
+  
+* rules(ecoRuleModel)
+  + output: list of rule names (with metadata?)
+  
+* getRules(ecoRuleModel, ecoRule)
+  + output: ecoRule object
+
+* plotRule(ecoRule) (type from ecoRule)
+  + ouput: image
+
+
+# Interactiviteit
+
+
+* "Choose species" from list of available species
+  + choose model
+    + regels (alle regels in een keer, of kiezen per regel) (misschien als ingeklapte boxjes)
+
+
+# Technical description
+
+- equation gebruiken asis (uit tekst) om te voorkomen dat er code geinterpreteerd wordt
+
+
+
+Even opzoeken hoe voorkomen kan worden dat script ingelezen en uitgevoerd wordt (veiligheid!!)
+
+
+```{r, fig.width=5, fig.height=4}
+#Your equation
+Eq = "-4.58643+1.90532*log10(X)+1.0646*log10(Z)"
+
+#Values you want to plug into x
+X = seq(1,10,by = 0.1)
+Z = 5
+
+#Evaluate Eq
+Y = eval(parse(text = Eq))
+plot(X,Y, type = "l")
+```
+
+## functies 
+
+plotten voor verschillende regels
+
+
+
+
+
+# Objects
+
+Consider making an S4 object class with slots for different parts of the ecorules. Look at python code for example. 
+Functions can be added as methods.
+
+
+Then make generic function e.g.:
+plot()
+show()
+print()
+
+Dit zou een klassedefinitie kunnen zijn... 
+
+```{r}
+setClass("habitat", slots=list(metadata="character", model ="list"))
+
+setMethod("plot", signature = "habitat", function(x,y) plot(x@model$etcetera$x, x@model$etcetera$y))
+h1 = 
+```
+
+
+
+```{r}
+require(xml2)
+require(tidyverse)
+file = "n:\\Projects\\11203500\\11203758\\B. Measurements and calculations\\005- habitat modeling\\EcologischeDatabase\\uitwerking_HABITAT_kennisregels\\Visualisatie_tool\\AutecologyXMLtest.xml"
+
+localfile = "data/AutecologyXMLtest.xml"
+
+test <- read_xml(file)
+
+View(test)
+
+xml_structure(xml_find_all(test, ".//values"))
+
+xml_find_all(test, ".//parameter")
+
+
+
+xml_find_all(test, ".//Model") %>% as_list()
+
+xml_attr(test, ".//Model")
+
+
+xml_find_all(test, ".//Species//LatName") %>% 
+
+```
+
+
+
+
+
+# Equation based
+
+Parameters varieren, afhankelijk van aantal en type parameters input opbouwen. '
+
+
+# Geonames
+
+Er is al een R library om met Geonames te communiceren http://geonames.r-forge.r-project.org/
+!! Voor gebruik moet een useraccount worden aangemaakt en geregistreerd.
+
+
+

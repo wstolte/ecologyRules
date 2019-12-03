@@ -6,7 +6,7 @@ knowldedgeRuleDir <- "data/_knowledgerules"
 
 # schema <- xml2::read_xml("n:/Projects/11203500/11203758/B. Measurements and calculations/005- habitat modeling/EcologischeDatabase/github_setup/XMLSchema/AutecologyXML.xsd")
 testfile = file.path(knowldedgeRuleDir, "species", "Fish", "Barbus barbus.xml")
-# testfile = file.path(knowldedgeRuleDir, "species", "Macrofytes", "Chara spp.xml")
+testfile = file.path(knowldedgeRuleDir, "species", "Macrofytes", "Chara spp.xml")
 #testfile = file.path(knowledgeRuleDir, "species", "Fish", "Barbus barbus.xml")
 #testfile = file.path(knowledgeRuleDir, "species", "Molluscs","Dreissena_polymorpha.xml")
 # testfile = file.path(knowledgeRuleDir, "species", "Macrophytes","Chara spp.xml")
@@ -124,7 +124,7 @@ if(length(formula_based) == 0){
 data = c(all_data_response_curve, all_data_formula_based)
 View(data)
 str(data)
-lapply(data, function(a) a$name)
+lapply(data, function(a) a$rule)
 
 map(data, list("name")) %>% unlist() %>% unname()
 map(data, list("type")) %>% unlist() %>% unname()
