@@ -5,14 +5,11 @@ knowledgeRuleDir <- "d:\\Projects\\check_outs\\KnowledgeRules\\_knowledgerules\\
 knowldedgeRuleDir <- "data/_knowledgerules"
 
 # schema <- xml2::read_xml("n:/Projects/11203500/11203758/B. Measurements and calculations/005- habitat modeling/EcologischeDatabase/github_setup/XMLSchema/AutecologyXML.xsd")
-<<<<<<< HEAD
 testfile = file.path(knowldedgeRuleDir, "species", "Fish", "Barbus barbus.xml")
 testfile = file.path(knowldedgeRuleDir, "species", "Macrofytes", "Chara spp.xml")
-=======
 #testfile = file.path(knowledgeRuleDir, "species", "Fish", "Barbus barbus.xml")
 #testfile = file.path(knowledgeRuleDir, "species", "Molluscs","Dreissena_polymorpha.xml")
 # testfile = file.path(knowledgeRuleDir, "species", "Macrophytes","Chara spp.xml")
->>>>>>> 1b49a44166e966cb17f96da77a425cf61cdcd760
 # n:\Projects\11203500\11203758\B. Measurements and calculations\005- habitat modeling\EcologischeDatabase\github_setup\_knowledgerules\species\Macrofytes\Chara spp.xml
 # d:\Projects\EcologischeKennisregels\ecoRules\data\_knowledgerules\species\Fish\Barbus barbus.xml
 
