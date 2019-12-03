@@ -1,10 +1,8 @@
 
 source("ae.R")
 
-knowldedgeRuleDir <- "n:/Projects/11203500/11203758/B. Measurements and calculations/005- habitat modeling/EcologischeDatabase/github_setup/_knowledgerules"
-knowldedgeRuleDir <- "data/_knowledgerules"
 knowledgeRuleDir <- "d:\\Projects\\check_outs\\KnowledgeRules\\_knowledgerules\\"
-#knowldedgeRuleDir <- "data/_knowledgerules"
+knowldedgeRuleDir <- "data/_knowledgerules"
 
 # schema <- xml2::read_xml("n:/Projects/11203500/11203758/B. Measurements and calculations/005- habitat modeling/EcologischeDatabase/github_setup/XMLSchema/AutecologyXML.xsd")
 <<<<<<< HEAD
@@ -13,7 +11,7 @@ testfile = file.path(knowldedgeRuleDir, "species", "Macrofytes", "Chara spp.xml"
 =======
 #testfile = file.path(knowledgeRuleDir, "species", "Fish", "Barbus barbus.xml")
 #testfile = file.path(knowledgeRuleDir, "species", "Molluscs","Dreissena_polymorpha.xml")
-testfile = file.path(knowledgeRuleDir, "species", "Macrophytes","Chara spp.xml")
+# testfile = file.path(knowledgeRuleDir, "species", "Macrophytes","Chara spp.xml")
 >>>>>>> 1b49a44166e966cb17f96da77a425cf61cdcd760
 # n:\Projects\11203500\11203758\B. Measurements and calculations\005- habitat modeling\EcologischeDatabase\github_setup\_knowledgerules\species\Macrofytes\Chara spp.xml
 # d:\Projects\EcologischeKennisregels\ecoRules\data\_knowledgerules\species\Fish\Barbus barbus.xml
@@ -33,7 +31,7 @@ get_element_ModelTypeNames(ae)
 get_system_names(ae, "HSI")
 get_element_system(ae, "HSI")
 
-system = get_element_system(ae, "HSI")[[2]] %>% xml2::xml_attrs() %>% unlist() %>% unname()
+system = get_element_system(ae, "HSI")[[1]] %>% xml2::xml_attrs() %>% unlist() %>% unname()
 
 get_element_knowledgerules(ae = ae, modeltype = "HSI", system = system) 
 get_element_knowledgerules(ae = ae, modeltype = "HSI", system = system) %>%
@@ -42,17 +40,11 @@ xml2::xml_children() %>% xml2::xml_attrs() %>% unlist() %>% unname()
 get_all_knowledgeruleNames(ae = ae, modeltype = "HSI", system = system) %>% data.frame()
 
 
-get_type_knowledgeruleNames(ae = ae, modeltype = "HSI", system = system) 
 a <- get_type_knowledgeruleNames(ae = ae, modeltype = "HSI", system = system) 
-class(a)
-dim(a)[1]
-a[,2]
-names = a[,1]
+b <-  split(a, a$name)
+View(b)
+lapply(b, function(x) paste(x$name))
 
-lapply(1:5, function(a) {
-  x = 1:100
-    names[a]
-})
 
 
 #=================================================
