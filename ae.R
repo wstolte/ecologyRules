@@ -23,6 +23,7 @@
 #XML paths # nakijken of dit de goede methode is... 
 topic_path                  = ".//Topic"
 species_path                = ".//Species"
+wfdind_path                 = ".//WFDindicator"
 # knowledgerule_layers        = ae.XMLlayers[c("layer1_2","layer1_2_1","layer1_2_1_1")]
 # hier iets veranderen.. 
 ModelTypePath               = ".//Autecology/ModelType"
@@ -154,19 +155,42 @@ get_element_species <- function(ae){
   return(type_tag_species)
 }
 
-#' gets element species description from autoecology xml object
+#' gets element WFD ind from autoecology xml object
 #'
 #' @param ae autoecology xml object
-#' @return An xml element with species description
+#' @return An xml element with WFD indicator information
+#' @examples
+get_element_wfdindicator <- function(ae){
+  type_tag_wfdind <- xml_find_first(ae, wfdind_path)
+  return(type_tag_wfdind)
+}
+
+#' gets element content description from autoecology xml object
+#'
+#' @param ae autoecology xml object
+#' @return An xml element with content description
 #' @examples
 get_element_contentdescription <- function(ae) {
   type_tag_sd <- xml_find_first(ae, description_path)
   return(type_tag_sd)
 }
 
-
+#' gets element species LatName from autoecology xml object
+#'
+#' @param ae autoecology xml object
+#' @return An XML element with species LatName
+#' @examples get_element_speciesname(ae)
 get_element_speciesname <- function(ae) {
-  get_element_species(ae) %>% xml2::xml_find_first("LatName") %>% xml2::as_list() %>% unlist()
+  get_element_species(ae) %>% xml2::xml_find_first("LatName")
+}
+
+#' gets element CommonNames from autoecology xml object
+#'
+#' @param ae autoecology xml object
+#' @return An XML element with CommonNames
+#' @examples get_element_commonnames(ae)
+get_element_commonnames <- function(ae) {
+  get_element_species(ae) %>% xml2::xml_find_first("CommonNames")
 }
 
 
@@ -328,13 +352,64 @@ get_element_formula_based <- function(ae, systemname, fbname){
     )
 }
 
-#' gets data response curve  from autoecology xml object
+#' gets dataframe content  from Topic specific xml object
+#'
+#' @param tse topic specific xml object
+#' @return A dataframe with commonnames and language
+#' @examples
+#' get_df_commonnames(tse)
+get_df_commonnames <- function(tse){
+  name_tag = ".//Name"
+  nr = 0
+  for( name in list(xml_find_all(tse, xpath = name_tag))){
+    if(nr == 0){
+      commonnames_df = data.frame("Name" = xml_attr(name,"name"),
+                                  "Language" = xml_attr(name,"language"),
+                                  stringsAsFactors = FALSE)
+    }else{
+      commonnames_df_temp = data.frame("Name" = xml_attr(name,"name"),
+                                       "Language" = xml_attr(name,"language"),
+                                       stringsAsFactors = FALSE)
+      commonnames_df = rbind(commonnames_df,commonnames_df_temp)
+    }
+    nr = nr + 1
+  }
+  return(commonnames_df) 
+}
+
+
+#' gets data content  from autoecology xml object
 #'
 #' @param ae autoecology xml object
-#' @param rc_element a response curve element
-#' @return An xml element knowledge rules
+#' @return A list with the content data
 #' @examples
-#' get_data_response_curve(rc_element)
+#' get_data_content(ae)
+get_data_content <- function(ae){
+  content_info = list()
+  if(length(get_element_species(ae)) > 0){
+    #get_element_species(ae)
+    content_info$latinname  = get_element_speciesname(ae) %>% xml_text(trim = TRUE)
+  }else if(length(get_element_wfdindicator(ae)) > 0){
+    pass
+  }else{
+    stop(paste("content type is not available.", sep = ""))
+  }
+  #For all
+  content_info$commonnames = get_element_commonnames(ae) %>% get_df_commonnames()
+  content_info$contentdes = xml_find_first(get_element_contentdescription(ae), ".//text") %>%
+    xml_text(trim = TRUE)
+  
+  return(content_info)
+}
+
+
+
+#' gets data response curve  from autoecology xml object
+#'
+#' @param rc_element a response curve element
+#' @return A list with the response curve element data
+#' @examples
+#' get_data_response_curve(ae)
 get_data_response_curve <- function(rc_element){
   rule_list = list()
   
@@ -430,9 +505,8 @@ get_data_response_curve <- function(rc_element){
 
 #' gets data formula based  from autoecology xml object
 #'
-#' @param ae autoecology xml object
 #' @param fb_element a formula based element
-#' @return An xml element knowledge rules
+#' @return A list with the formula based element data
 #' @examples
 #' get_data_formula_based(fbelement)
 get_data_formula_based <- function(fb_element){

@@ -147,7 +147,7 @@ all_data_formula_based = lapply(formula_based, get_data_formula_based)
 all_data_response_curve = lapply(response)
 View(all_data_formula_based)
 
-get_data_content(ae)
+
 
 
 
