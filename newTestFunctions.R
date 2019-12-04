@@ -69,8 +69,7 @@ nametag = ae_xpath_attr_build(".//Autecology/ModelType/System", mySystem)
 xml2::xml_find_first(ae, nametag)
 
 nametag2 = ae_xpath_attr_build(".//System", mySystem)
-get_element_system(ae, "HSI") %>% xml2::xml_parent() %>% xml2::xml_find_first(nametag2)  %>% View()
-
+get_element_system(ae, "HSI") %>% xml2::xml_parent() %>% xml2::xml_find_first(nametag2) 
 
 xml2::xml_find_all(ae, ".//Autecology/ModelType/System")
 
@@ -97,7 +96,9 @@ get_knowledgerule_attributes(ae)
 get_knowledgerule_stage(ae)
 get_responsecurve_keys(ae, "testmodel") #is dit de bedoeling?
 
+Eq = "-4.58643+1.90532*log10(X)+1.0646*log10(Z)"
 
+interpret(Eq)
 
 #####################MARC##########################
 
@@ -122,6 +123,16 @@ if(length(formula_based) == 0){
     all_data_formula_based = lapply(formula_based, get_data_formula_based)
   }
 data = c(all_data_response_curve, all_data_formula_based)
+map(data, list("name"))
+data[[2]]$name
+map(data[[2]]$parameters, "dataname") %>% unlist
+map(data[[2]]$parameters, "type")
+map(data[[2]]$parameters, "unit")
+map(data[[2]]$parameters, "data")
+
+map(data, "equation_text")
+
+
 View(data)
 str(data)
 lapply(data, function(a) a$rule)

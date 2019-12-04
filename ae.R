@@ -51,6 +51,7 @@ model_path_spec             = ".//KnowledgeRule/Model"
 require(tidyverse)
 require(purrr)
 require(xml2)
+library(rlang)
 
 extract_names <- function(dd) {
   require(xml2)
@@ -69,6 +70,27 @@ extract_names <- function(dd) {
 }
 
 
+
+## idea for function to make mathematical expressions safe. Only allow functions containging whitelist of functions.
+## Add all possible variable names? 
+## 
+interpret <- function(expr_str, 
+                      max_length = 32, 
+                      whitelist = c("x", "y", "/", "*", "+", "-", "log10", "sqrt", "c")) {
+  safer_eval <- function(expr) {
+    if (rlang::is_call(expr)) {
+      fn_name <- rlang::call_name(expr)
+      if (!fn_name %in% whitelist) stop("Disallowed function: ", fn_name)
+      do.call(get(fn_name, baseenv()), Map(safer_eval, rlang::call_args(expr)))
+    } else if (rlang::is_syntactic_literal(expr)) {
+      expr
+    } else {
+      stop("Unknown expression: ", expr)
+    }
+  }
+  stopifnot(length(expr_str) < max_length)
+  safer_eval(rlang::parse_expr(expr_str))
+}
 
 
 
@@ -144,7 +166,7 @@ get_element_contentdescription <- function(ae) {
 
 
 get_element_speciesname <- function(ae) {
-  get_element_species(ae) %>% xml2::xml_find_first("LatName") %>% as_list() %>% unlist()
+  get_element_species(ae) %>% xml2::xml_find_first("LatName") %>% xml2::as_list() %>% unlist()
 }
 
 
