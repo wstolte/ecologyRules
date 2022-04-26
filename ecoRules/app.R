@@ -224,7 +224,7 @@ body    <- dashboardBody(
                   width = 12,
                   p("Press to restart, All read information will be lost"),
                   useShinyjs(),                                           # Include shinyjs in the UI
-                  extendShinyjs(text = jsResetCode),                      # Add the js code to the page
+                  #extendShinyjs(text = jsResetCode),                      # Add the js code to the page
                   actionButton("reset_button", "Restart application")
               )
               
@@ -462,12 +462,12 @@ server <- function(input, output, session) {
             fluidRow(
               column(width = 6, offset = 0,
                      if(category ==  "ResponseCurve" & type == "scalar"){
-                       renderPlot(ggplot(data, aes(value, HSI)) + geom_line(color = "lightblue", size = 1) + theme_minimal(), width = 400, height = 300)},
+                       renderPlot(ggplot(data, aes(input, output)) + geom_line(color = "lightblue", size = 1) + theme_minimal(), width = 400, height = 300)},
                      if(category ==  "ResponseCurve" & type == "categorical"){
-                       renderPlot(ggplot(data, aes(cat, HSI)) + geom_bar(fill = "lightblue", stat="identity") + theme_minimal() + theme(axis.text.x = element_text(angle = 45, vjust = 0.5)), width = 400, height = 300)},
+                       renderPlot(ggplot(data, aes(input_cat, output)) + geom_bar(fill = "lightblue", stat="identity") + theme_minimal() + theme(axis.text.x = element_text(angle = 45, vjust = 0.5)), width = 400, height = 300)},
                      if(category ==  "ResponseCurve" & type == "range / categorical"){
                        data$cat = reorder(data$cat, data$rangemin)
-                       renderPlot(ggplot(data, aes(cat, HSI)) + 
+                       renderPlot(ggplot(data, aes(input, output)) + 
                                     geom_bar(fill = "lightblue", stat="identity") + 
                                     geom_text(aes(cat, -0.1, label = paste(rangemin, rangemax, sep = " - "))) +
                                     theme_minimal() + 

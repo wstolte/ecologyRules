@@ -3,7 +3,7 @@ source("HABITAT_functions.R")
 library("raster")
 
 #Get directory with Knowledge rules
-knowledgeRuleDir <- "data\\_knowledgerules\\"
+knowledgeRuleDir <- "data\\_knowledgerules"
 
 #Read the knowledge rules of the Barbel
 testfile = file.path(knowledgeRuleDir, "species", "Fish", "Barbus_barbus.xml")
@@ -14,8 +14,8 @@ get_element_ModelTypeNames(ae)
 get_system_names(ae, "HSI")
 
 #Scan the file to read in the model (not complete yet)
-barbus_model <- scan(ae, model = "HSI", system = "Voortplanting Barbeel (grindbedden)")
-
+barbus_model <- scan(ae, modelname = "HSI", systemname = "Voortplanting Barbeel (grindbedden)")
+get_system_description(ae, modelname = "HSI", systemname = "Voortplanting Barbeel (grindbedden)")
 
 #Get an overview of all knowledgerules and knowledgerule types available
 get_all_knowledgeruleNames(ae = ae, modeltype = "HSI", system = "Voortplanting Barbeel (grindbedden)") %>% 

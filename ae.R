@@ -22,14 +22,16 @@
 
 #XML paths # nakijken of dit de goede methode is... 
 topic_path                  = ".//Topic"
+parameter_path              = ".//Parameter"
 species_path                = ".//Species"
+habitats_path                = ".//Habitats"
 wfdind_path                 = ".//WFDindicator"
 # knowledgerule_layers        = ae.XMLlayers[c("layer1_2","layer1_2_1","layer1_2_1_1")]
 # hier iets veranderen.. 
 ModelTypePath               = ".//Autecology/ModelType"
 knowledgerule_path   = ".//KnowledgeRules"
   # "/".join([self.XMLlayers[x] for x in knowledgerule_layers])
-description_path     = ".//ContentDescription"
+description_path     = ".//TopicDescription"
 modeldescription_path_spec  = ".//ModelDescription"
 model_path_spec             = ".//KnowledgeRule/Model"
 
@@ -53,6 +55,7 @@ require(tidyverse)
 require(purrr)
 require(xml2)
 library(rlang)
+library(data.table)
 
 extract_names <- function(dd) {
   require(xml2)
@@ -145,6 +148,16 @@ get_modeltypes <- function(ae){
   get_element_ModelType(ae) %>% xml2::xml_attrs() %>% map_chr("name")
 }
 
+#' gets element parameters from autoecology xml object
+#'
+#' @param ae autoecology xml object
+#' @return An xml element with species information
+#' @examples
+get_element_parameter <- function(ae){
+  type_tag_parameter <- xml_find_first(ae, parameter_path)
+  return(type_tag_parameter)
+}
+
 #' gets element species from autoecology xml object
 #'
 #' @param ae autoecology xml object
@@ -153,6 +166,16 @@ get_modeltypes <- function(ae){
 get_element_species <- function(ae){
   type_tag_species <- xml_find_first(ae, species_path)
   return(type_tag_species)
+}
+
+#' gets element habitats from autoecology xml object
+#'
+#' @param ae autoecology xml object
+#' @return An xml element with species information
+#' @examples
+get_element_habitats <- function(ae){
+  type_tag_habitats <- xml_find_first(ae, habitats_path)
+  return(type_tag_habitats)
 }
 
 #' gets element WFD ind from autoecology xml object
@@ -181,7 +204,8 @@ get_element_contentdescription <- function(ae) {
 #' @return An XML element with species LatName
 #' @examples get_element_speciesname(ae)
 get_element_speciesname <- function(ae) {
-  get_element_species(ae) %>% xml2::xml_find_first("LatName")
+  type_tag_speciesname <- xml_find_first(ae,"LatName")
+  return(type_tag_speciesname)
 }
 
 #' gets element CommonNames from autoecology xml object
@@ -190,7 +214,8 @@ get_element_speciesname <- function(ae) {
 #' @return An XML element with CommonNames
 #' @examples get_element_commonnames(ae)
 get_element_commonnames <- function(ae) {
-  get_element_species(ae) %>% xml2::xml_find_first("CommonNames")
+  type_tag_commonnames <- xml_find_first(ae,"CommonNames")
+  return(type_tag_commonnames)
 }
 
 
@@ -319,15 +344,15 @@ get_responsecurve_keys <- function(ae, knowledgerule) {
 #' gets element response curve  from autoecology xml object
 #'
 #' @param ae autoecology xml object
+#' @param modelname name of model
 #' @param systemname name of system
 #' @param rcname name of response curve
 #' @return An xml element knowledge rules
 #' @examples
 #' get_element_response_curve(ae, "testmodel","testresponsecurve")
-get_element_response_curve <- function(ae, systemname, rcname){
+get_element_response_curve <- function(ae, modelname = "HSI", systemname, rcname){
   ae %>%
-    get_element_knowledgerule(systemname) %>% 
-    xml_child(search = "Model") %>%
+    get_element_knowledgerules(modelname, systemname) %>% 
     xml_children() %>% 
     xml_find_all(
       xpath = ae_xpath_attr_build(path = "//ResponseCurve", rcname)
@@ -337,15 +362,15 @@ get_element_response_curve <- function(ae, systemname, rcname){
 #' gets element formula based  from autoecology xml object
 #'
 #' @param ae autoecology xml object
+#' @param modelname name of model
 #' @param systemname name of system
 #' @param fbname name of formula based
 #' @return An xml element knowledge rules
 #' @examples
 #' get_element_formula_based(ae, "testmodel","testformulabased")
-get_element_formula_based <- function(ae, systemname, fbname){
+get_element_formula_based <- function(ae, modelname = "HSI", systemname, fbname){
   ae %>%
-    get_element_knowledgerule(systemname) %>% 
-    xml_child(search = "Model") %>%
+    get_element_knowledgerules(modelname,systemname) %>% 
     xml_children() %>% 
     xml_find_all(
       xpath = ae_xpath_attr_build(path = "//FormulaBased", fbname)
@@ -402,7 +427,37 @@ get_data_content <- function(ae){
   return(content_info)
 }
 
-
+#' gets system description content  from autoecology xml object
+#'
+#' @param ae autoecology xml object
+#' @param modelname name of model
+#' @param systemname name of system
+#' @return A list with the content data
+#' @examples
+#' get_system_description(ae)
+get_system_description <- function(ae, modelname, systemname){
+  nametag = ae_xpath_attr_build(".//System", system)
+  tse <- get_element_system(ae, "HSI") %>% xml2::xml_parent() %>% xml2::xml_find_first(nametag) %>%
+    xml_find_first(xpath = ".//SystemDescription")
+  des_tag = ".//Description"
+  nr = 0
+  for( sysdescr in list(xml_find_all(tse, xpath = des_tag))){
+    if(nr == 0){
+      sysdescr_df = data.frame("Language" = xml_attr(sysdescr,"language"),
+                               "Description" = xml_find_first(sysdescr,".//text") %>%
+                                 xml_text(),
+                               stringsAsFactors = FALSE)
+    }else{
+      sysdescr_df_temp = data.frame("Language" = xml_attr(sysdescr,"language"),
+                                    "Description" = xml_find_first(sysdescr,".//text") %>%
+                                      xml_text(),
+                                    stringsAsFactors = FALSE)
+      sysdescr_df = rbind(sysdescr_df,sysdescr_df_temp)
+    }
+    nr = nr + 1
+  }
+  return(sysdescr_df[1,"Description"])
+}
 
 #' gets data response curve  from autoecology xml object
 #'
@@ -415,23 +470,59 @@ get_data_response_curve <- function(rc_element){
   
   rule_list$name = rc_element  %>% xml_attr("name")
   rule_list$KnowledgeruleCategorie = "ResponseCurve"
-  rule_list$type = rc_element %>% xml_child(search = "type") %>% xml_text(trim = TRUE)
-  rule_list$layername = rc_element %>% xml_child(search = "layername") %>% xml_text(trim = TRUE)
-  rule_list$unit = rc_element %>% xml_child(search = "unit") %>% xml_text(trim = TRUE)
-  rule_list$statistic = rc_element %>% xml_child(search = "statistic") %>% xml_text(trim = TRUE) 
+  content_element = rc_element %>% xml_child(search = "Content")
+  rule_list$type =  content_element %>% 
+                    xml_child(search = "type") %>% xml_text(trim = TRUE)
+  
+  rule_list$inputLayers = list()
+  input_layer_children = rc_element %>% xml_child(search = "inputLayers") %>% xml_children()
+  nr = 0
+  for(child in input_layer_children){
+    nr = nr + 1
+    input_layer <- list()
+    input_layer$name = child %>% xml_attr("name")
+    input_layer$parameter_name = child %>% xml_child(search = "parameter_name") %>% xml_text(trim = TRUE)
+    input_layer$parameter_cat = child %>% xml_child(search = "parameter_cat") %>% xml_text(trim = TRUE)
+    input_layer$period = child %>% xml_child(search = "period") %>% xml_text(trim = TRUE)
+    input_layer$unit = child %>% xml_child(search = "unit") %>% xml_text(trim = TRUE)
+    input_layer$statistic = child %>% xml_child(search = "statistic") %>% xml_text(trim = TRUE)
+    input_layer$layer_filename = child %>% xml_child(search = "layer_filename") %>% xml_text(trim = TRUE)
+    input_layer$description = child %>% xml_child(search = "description") %>% xml_text(trim = TRUE)
+    
+    setattr(rule_list$inputLayers,input_layer$name,input_layer) 
+  }
+  
+  rule_list$outputLayers = list()
+  output_layer_children = rc_element %>% xml_child(search = "outputLayers") %>% xml_children()
+  nr = 0
+  for(child in output_layer_children){
+    nr = nr + 1
+    output_layer <- list()
+    output_layer$name = child %>% xml_attr("name")
+    output_layer$parameter_name = child %>% xml_child(search = "parameter_name") %>% xml_text(trim = TRUE)
+    output_layer$parameter_cat = child %>% xml_child(search = "parameter_cat") %>% xml_text(trim = TRUE)
+    output_layer$period = child %>% xml_child(search = "period") %>% xml_text(trim = TRUE)
+    output_layer$unit = child %>% xml_child(search = "unit") %>% xml_text(trim = TRUE)
+    output_layer$statistic = child %>% xml_child(search = "statistic") %>% xml_text(trim = TRUE)
+    output_layer$layer_filename = child %>% xml_child(search = "layer_filename") %>% xml_text(trim = TRUE)
+    output_layer$description = child %>% xml_child(search = "description") %>% xml_text(trim = TRUE)
+    
+    setattr(rule_list$outputLayers,output_layer$name,output_layer)
+    
+  }
   
   nr = 0
   if(rule_list$type == "scalar"){
     name_tag = ".//valuesScalar/parameter"
-    column_names = names(xml_attrs(xml_find_first(rc_element, xpath = name_tag)))
-    for(parameter in list(xml_find_all(rc_element, xpath = name_tag))){
+    column_names = names(unlist(xml_attrs(xml_find_first(content_element, xpath = name_tag))))
+    for(parameter in list(xml_find_all(content_element, xpath = name_tag))){
       if(nr == 0){
-        parameter_df = data.frame(val1 = as.numeric(xml_attr(parameter,"value")), 
-                                val2 = as.numeric(xml_attr(parameter,"HSI")),
+        parameter_df = data.frame(val1 = as.numeric(xml_attr(parameter,"input")), 
+                                val2 = as.numeric(xml_attr(parameter,"output")),
                                 stringsAsFactors = FALSE)
       }else{
-        parameter_df_temp = data.frame(val1 = as.numeric(xml_attr(parameter,"value")), 
-                                  val2 = as.numeric(xml_attr(parameter,"HSI")),
+        parameter_df_temp = data.frame(val1 = as.numeric(xml_attr(parameter,"input")), 
+                                  val2 = as.numeric(xml_attr(parameter,"output")),
                                   stringsAsFactors = FALSE)
         parameter_df = bind_rows(parameter_df,parameter_df_temp)            
       }
@@ -440,15 +531,19 @@ get_data_response_curve <- function(rc_element){
   }
   else if(rule_list$type == "categorical"){
     name_tag = ".//valuesCategorical/parameter"
-    column_names = names(xml_attrs(xml_find_first(rc_element, xpath = name_tag)))
-    for(parameter in list(xml_find_all(rc_element, xpath = name_tag))){
+    column_names = names(unlist(xml_attrs(xml_find_first(content_element, xpath = name_tag))))
+    for(parameter in list(xml_find_all(content_element, xpath = name_tag))){
       if(nr == 0){
-        parameter_df = data.frame(val1 = as.character(xml_attr(parameter,"cat")), 
-                                  val2 = as.numeric(xml_attr(parameter,"HSI")),
+        parameter_df = data.frame(val1 = as.numeric(xml_attr(parameter,"input")),
+                                  val2 = as.character(xml_attr(parameter,"input_cat")), 
+                                  val3 = as.numeric(xml_attr(parameter,"output")),
+                                  val3 = as.character(xml_attr(parameter,"output_cat")),
                                   stringsAsFactors = FALSE)
       }else{
-        parameter_df_temp = data.frame(val1 = as.character(xml_attr(parameter,"cat")), 
-                                       val2 = as.numeric(xml_attr(parameter,"HSI")),
+        parameter_df_temp = data.frame(val1 = as.numeric(xml_attr(parameter,"input")),
+                                       val2 = as.character(xml_attr(parameter,"input_cat")), 
+                                       val3 = as.numeric(xml_attr(parameter,"output")),
+                                       val3 = as.character(xml_attr(parameter,"output_cat")),
                                        stringsAsFactors = FALSE)
         parameter_df = bind_rows(parameter_df,parameter_df_temp)            
       }
@@ -457,8 +552,8 @@ get_data_response_curve <- function(rc_element){
   }
   else if(rule_list$type == "ranges"){
     name_tag = ".//valuesRanges/parameter"
-    column_names = names(xml_attrs(xml_find_first(rc_element, xpath = name_tag)))
-    for(parameter in list(xml_find_all(rc_element, xpath = name_tag))){
+    column_names = names(unlist(xml_attrs(xml_find_first(content_element, xpath = name_tag))))
+    for(parameter in list(xml_find_all(content_element, xpath = name_tag))){
       if(nr == 0){
         parameter_df = data.frame(val1 = as.numeric(xml_attr(parameter,"rangemin")), 
                                   val2 = as.numeric(xml_attr(parameter,"rangemax")),
@@ -476,8 +571,8 @@ get_data_response_curve <- function(rc_element){
   }
   else if(rule_list$type == "range / categorical"){
     name_tag = ".//valuesRangeCategorical/parameter"
-    column_names = names(xml_attrs(xml_find_first(rc_element, xpath = name_tag)))
-    for(parameter in list(xml_find_all(rc_element, xpath = name_tag))){
+    column_names = names(unlist(xml_attrs(xml_find_first(content_element, xpath = name_tag))))
+    for(parameter in list(xml_find_all(content_element, xpath = name_tag))){
       if(nr == 0){
         parameter_df = data.frame(val1 = as.numeric(xml_attr(parameter,"rangemin")), 
                                   val2 = as.numeric(xml_attr(parameter,"rangemax")),
@@ -579,6 +674,7 @@ get_data_formula_based <- function(fb_element){
 #' gets element model description from autoecology xml object
 #'
 #' @param ae autoecology xml object
+#' @modelname name of model
 #' @return An xml element knowledge rules
 #' @examples
 get_element_modeldescription <- function(ae, modelname) {
@@ -596,15 +692,72 @@ get_element_modeldescription <- function(ae, modelname) {
 #' scans an xml file containing knowledge rules
 #'
 #' @param ae autoecology xml object
+#' @modelname name of model
+#' @parem systemname name of system 
 #' @return An xml structure containing ecological knowledge rules for a species
 #' @examples
-scan <- function(ae){
-  species_root = get_element_species(ae)
-  latinname = xml2::xml_find_chr(".//LatName")
-  commonname = xml2::xml_find_chr(".//CommonName")
-  type_tag_krs = getelement_knowledgerules(ae)
+scan <- function(ae, modelname, systemname){
+  if(length(get_element_parameter(ae)) > 0){
+    parameter_root = get_element_parameter(ae)
+    commonname = parameter_root %>% xml2::xml_find_all(".//CommonNames") %>%
+                  xml_children()
+    
+    #Feedback
+    print(paste0("Type of Topic : ","Parameter"))
+    
+    
+  }else if(length(get_element_species(ae)) > 0){
+    species_root = get_element_species(ae)
+    latinname = species_root %>% xml2::xml_find_all(".//LatName") %>% xml_text()
+    commonnames = species_root %>% xml2::xml_find_all(".//CommonNames") %>%
+                    xml_children()
+    
+    #Feedback
+    print(paste0("Type of Topic : ","Species"))
+    print(paste0("Latin name : ",latinname))
+   
+    
+  }else if(length(get_element_habitats(ae)) > 0){
+    habitats_root = get_element_habitats(ae)
+    commonnames = habitats_root %>% xml2::xml_find_all(".//CommonNames") %>%
+                    xml_children()
+    
+    #Feedback
+    print(paste0("Type of Topic : ","Habitat"))
+    
+    
+  }else if(length(get_element_wfdindicator(ae)) >0){
+    wfdind_root = get_element_wfdindicator(ae)
+    commonnames = wfdind_root %>% xml2::xml_find_all(".//CommonNames") %>%
+                    xml_children()
+    
+    #Feedback
+    print(paste0("Type of Topic : ","WFDindicator"))
+    
+    
+  }else{
+    stop(paste0("Unknown topic presented. Valuable topics are 'Parameter',",
+                 "'Species','Habitats' and 'WFDindicator'.\n",
+                 "Please check the XML file"))
+  }
+  
+  #Feedback commonnames
+  for(name in commonnames){
+    print(paste0("Commonname : language = ",xml_attr(name, "language"),", name = ",xml_attr(name, "name")))
+  }
+  
+  type_tag_krs = get_element_knowledgerules(ae, model= modelname, system = systemname)
+  
+  #create flowdiagram
+  
+  
+  #store knowledge rules
+  
+  
   models_available = NA# get modelkeys? python: [e.get(self.XMLconvention["modelkey"]) for e in type_tag_krs]
   models = models_available
+  
+
 }
   
 
