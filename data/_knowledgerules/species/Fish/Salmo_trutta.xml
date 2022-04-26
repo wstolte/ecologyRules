@@ -1,0 +1,1069 @@
+<AutecologyXML xmlns="https://github.com/Deltares/KnowledgeRules" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="https://github.com/Deltares/KnowledgeRules ../../../xmlschema/AutecologyXML.xsd">
+	<Topic>
+		<Species>
+			<EoLpagenr>206777</EoLpagenr>
+			<LatName>Salmo trutta</LatName>
+			<CommonNames>
+				<Name name="Bruine forel" language="NL"/>
+			</CommonNames>
+			<SpecCode/>
+		</Species>
+	</Topic>
+	<Autecology>
+		<ModelType name="HSI">
+			<System name="adult">
+				<Scope>
+					<SpatialScope>
+						<GeoNames name="North America" id="6255149"/>
+					</SpatialScope>
+					<TemporalScope>
+						<StartDate>1986-01-01</StartDate>
+						<EndDate>2012-01-01</EndDate>
+					</TemporalScope>
+				</Scope>
+				<SystemDescription>
+					<Description language="NL">
+						<text>&lt;h1 id="Bruineforel-Salmotrutta-Onzekerheidenvalidatie"&gt;Onzekerheid en validatie&lt;/h1&gt;
+
+&lt;p&gt;&lt;img class="emoticon emoticon-warning" src="./Bruine forel - Salmo trutta - HABITAT - Spatial analysis tool - Deltares Public Wiki_files/warning.svg" data-emoticon-name="warning" alt="(warning)"&gt; Deze dosis-effect relaties zijn niet gevalideerd.&lt;/p&gt;
+
+&lt;h1 id="Bruineforel-Salmotrutta-Toepasbaarheid"&gt;Toepasbaarheid&lt;/h1&gt;
+
+&lt;p&gt;Deze habitatregels zijn opgesteld voor Noord-Amerika.&lt;/p&gt;
+
+&lt;h1 id="Bruineforel-Salmotrutta-Voorbeeldproject"&gt;Voorbeeld project&lt;/h1&gt;
+
+&lt;p&gt;Er is geen voorbeeld project beschikbaar.&lt;/p&gt;</text>
+					</Description>
+				</SystemDescription>
+				<SystemFlowDiagrams>
+					<FlowDiagram name="adult">
+						<From name="Habitat_quality">
+							<label>"Habitat_quality"</label>
+							<equation>min</equation>
+							<To>Temperature_adult_juvenile</To>
+							<To>Temperature_juvenile</To>
+							<To>Temperature_embryo</To>
+							<To>Oxygen_below10degrees</To>
+							<To>Oxygen_above10degrees</To>
+							<To>Flow_velocity_embryo</To>
+							<To>Vegetation_larvae</To>
+							<To>Vegetation_adult</To>
+							<To>Substrate_A</To>
+							<To>Substrate_B</To>
+							<To>Substrate_class</To>
+							<To>Dominant_Substrate_type</To>
+							<To>Coverage_ponds</To>
+							<To>Bank_vegetation</To>
+							<To>Bank_stability</To>
+							<To>Acidity</To>
+							<To>Flow</To>
+							<To>Pond_classification</To>
+							<To>Fine_sediment_embryo</To>
+							<To>Fine_sediment_adult</To>
+							<To>Schadow</To>
+							<To>Nitrate_concentration</To>
+							<To>Peak_discharge</To>
+						</From>
+					</FlowDiagram>
+				</SystemFlowDiagrams>
+				<KnowledgeRules>
+					<ResponseCurve name="Temperature_adult_juvenile">
+						<inputLayers>
+							<layer name="Temperature_adult_juvenile">
+								<parameter_name>Temperature_adult_juvenile</parameter_name>
+								<parameter_cat>Undefined</parameter_cat>
+								<period>Undefined</period>
+								<position>Undefined</position>
+								<unit>"degrees Celsius"</unit>
+								<statistic>maximum</statistic>
+								<layer_filename>Temperature_adult_juvenile</layer_filename>
+								<description>Undefined</description>
+							</layer>
+						</inputLayers>
+						<Content>
+							<type>scalar</type>
+							<description>"Maximum water temperature in degrees Celsius."</description>
+							<author>"Marc Weeber"</author>
+							<date>2013-01-19</date>
+							<references>
+								<reference author="U.S. Fish and Wildlife Service" year="1986" title="" journal="" identification=""/>
+							</references>
+							<valuesScalar>
+								<parameter input="0" output="0.0"/>
+								<parameter input="12" output="1.0"/>
+								<parameter input="19" output="1.0"/>
+								<parameter input="27" output="0.0"/>
+								<parameter input="30" output="0.0"/>
+							</valuesScalar>
+						</Content>
+						<outputLayers>
+							<layer name="HSI_Temperature_adult_juvenile">
+								<parameter_name>HSI_Temperature_adult_juvenile</parameter_name>
+								<parameter_cat>HSI</parameter_cat>
+								<period>Undefined</period>
+								<position>Undefined</position>
+								<unit>factor</unit>
+								<statistic>average</statistic>
+								<layer_filename>HSI_Temperature_adult_juvenile</layer_filename>
+								<description>Undefined</description>
+							</layer>
+						</outputLayers>
+					</ResponseCurve>
+					<ResponseCurve name="Temperature_juvenile">
+						<inputLayers>
+							<layer name="Temperature_juvenile">
+								<parameter_name>Temperature_juvenile</parameter_name>
+								<parameter_cat>Undefined</parameter_cat>
+								<period>Undefined</period>
+								<position>Undefined</position>
+								<unit>"degrees Celsius"</unit>
+								<statistic>maximum</statistic>
+								<layer_filename>Temperature_juvenile</layer_filename>
+								<description>Undefined</description>
+							</layer>
+						</inputLayers>
+						<Content>
+							<type>scalar</type>
+							<description>"Maximum water temperature in degrees Celsius."</description>
+							<author>"Marc Weeber"</author>
+							<date>2013-01-19</date>
+							<references>
+								<reference author="U.S. Fish and Wildlife Service" year="1986" title="" journal="" identification=""/>
+							</references>
+							<valuesScalar>
+								<parameter input="0" output="0.0"/>
+								<parameter input="5" output="0.0"/>
+								<parameter input="7" output="1.0"/>
+								<parameter input="15" output="1.0"/>
+								<parameter input="26" output="0.0"/>
+								<parameter input="30" output="0.0"/>
+							</valuesScalar>
+						</Content>
+						<outputLayers>
+							<layer name="HSI_Temperature_juvenile">
+								<parameter_name>HSI_Temperature_juvenile</parameter_name>
+								<parameter_cat>HSI</parameter_cat>
+								<period>Undefined</period>
+								<position>Undefined</position>
+								<unit>factor</unit>
+								<statistic>average</statistic>
+								<layer_filename>HSI_Temperature_juvenile</layer_filename>
+								<description>Undefined</description>
+							</layer>
+						</outputLayers>
+					</ResponseCurve>
+					<ResponseCurve name="Temperature_embryo">
+						<inputLayers>
+							<layer name="Temperature_embryo">
+								<parameter_name>Temperature_embryo</parameter_name>
+								<parameter_cat>Undefined</parameter_cat>
+								<period>Undefined</period>
+								<position>Undefined</position>
+								<unit>"degrees Celsius"</unit>
+								<statistic>maximum</statistic>
+								<layer_filename>Temperature_embryo</layer_filename>
+								<description>Undefined</description>
+							</layer>
+						</inputLayers>
+						<Content>
+							<type>scalar</type>
+							<description>"Maximum water temperature in degrees Celsius."</description>
+							<author>"Marc Weeber"</author>
+							<date>2013-01-19</date>
+							<references>
+								<reference author="U.S. Fish and Wildlife Service" year="1986" title="" journal="" identification=""/>
+							</references>
+							<valuesScalar>
+								<parameter input="0" output="0.0"/>
+								<parameter input="7" output="1.0"/>
+								<parameter input="13" output="1.0"/>
+								<parameter input="15" output="0.0"/>
+								<parameter input="20" output="0.0"/>
+							</valuesScalar>
+						</Content>
+						<outputLayers>
+							<layer name="HSI_Temperature_embryo">
+								<parameter_name>HSI_Temperature_embryo</parameter_name>
+								<parameter_cat>HSI</parameter_cat>
+								<period>Undefined</period>
+								<position>Undefined</position>
+								<unit>factor</unit>
+								<statistic>average</statistic>
+								<layer_filename>HSI_Temperature_embryo</layer_filename>
+								<description>Undefined</description>
+							</layer>
+						</outputLayers>
+					</ResponseCurve>
+					<ResponseCurve name="Oxygen_below10degrees">
+						<inputLayers>
+							<layer name="Oxygen_below10degrees">
+								<parameter_name>Oxygen_below10degrees</parameter_name>
+								<parameter_cat>Undefined</parameter_cat>
+								<period>Undefined</period>
+								<position>Undefined</position>
+								<unit>"mg/l"</unit>
+								<statistic>average</statistic>
+								<layer_filename>Oxygen_below10degrees</layer_filename>
+								<description>Undefined</description>
+							</layer>
+						</inputLayers>
+						<Content>
+							<type>scalar</type>
+							<description>"Dissolved oxygen in water when temperature is below ten degrees Celsius in milligrams per liter."</description>
+							<author>"Marc Weeber"</author>
+							<date>2013-01-19</date>
+							<references>
+								<reference author="U.S. Fish and Wildlife Service" year="1986" title="" journal="" identification=""/>
+							</references>
+							<valuesScalar>
+								<parameter input="0" output="0.0"/>
+								<parameter input="3" output="0.0"/>
+								<parameter input="9.3" output="1.0"/>
+								<parameter input="15" output="1.0"/>
+							</valuesScalar>
+						</Content>
+						<outputLayers>
+							<layer name="HSI_Oxygen_below10degrees">
+								<parameter_name>HSI_Oxygen_below10degrees</parameter_name>
+								<parameter_cat>HSI</parameter_cat>
+								<period>Undefined</period>
+								<position>Undefined</position>
+								<unit>factor</unit>
+								<statistic>average</statistic>
+								<layer_filename>HSI_Oxygen_below10degrees</layer_filename>
+								<description>Undefined</description>
+							</layer>
+						</outputLayers>
+					</ResponseCurve>
+					<ResponseCurve name="Oxygen_above10degrees">
+						<inputLayers>
+							<layer name="Oxygen_above10degrees">
+								<parameter_name>Oxygen_above10degrees</parameter_name>
+								<parameter_cat>Undefined</parameter_cat>
+								<period>Undefined</period>
+								<position>Undefined</position>
+								<unit>"mg/l"</unit>
+								<statistic>average</statistic>
+								<layer_filename>Oxygen_above10degrees</layer_filename>
+								<description>Undefined</description>
+							</layer>
+						</inputLayers>
+						<Content>
+							<type>scalar</type>
+							<description>"Dissolved oxygen in water when temperature is above ten degrees Celsius in milligrams per liter."</description>
+							<author>"Marc Weeber"</author>
+							<date>2013-01-19</date>
+							<references>
+								<reference author="U.S. Fish and Wildlife Service" year="1986" title="" journal="" identification=""/>
+							</references>
+							<valuesScalar>
+								<parameter input="0" output="0.0"/>
+								<parameter input="6" output="0.0"/>
+								<parameter input="14.5" output="1.0"/>
+								<parameter input="15" output="1.0"/>
+							</valuesScalar>
+						</Content>
+						<outputLayers>
+							<layer name="HSI_Oxygen_above10degrees">
+								<parameter_name>HSI_Oxygen_above10degrees</parameter_name>
+								<parameter_cat>HSI</parameter_cat>
+								<period>Undefined</period>
+								<position>Undefined</position>
+								<unit>factor</unit>
+								<statistic>average</statistic>
+								<layer_filename>HSI_Oxygen_above10degrees</layer_filename>
+								<description>Undefined</description>
+							</layer>
+						</outputLayers>
+					</ResponseCurve>
+					<ResponseCurve name="Flow_velocity_embryo">
+						<inputLayers>
+							<layer name="Flow_velocity_embryo">
+								<parameter_name>Flow_velocity_embryo</parameter_name>
+								<parameter_cat>Undefined</parameter_cat>
+								<period>Undefined</period>
+								<position>Undefined</position>
+								<unit>"cm/s"</unit>
+								<statistic>average</statistic>
+								<layer_filename>Flow_velocity_embryo</layer_filename>
+								<description>Undefined</description>
+							</layer>
+						</inputLayers>
+						<Content>
+							<type>scalar</type>
+							<description>"Average flow velocity in centimeters per second."</description>
+							<author>"Marc Weeber"</author>
+							<date>2013-01-19</date>
+							<references>
+								<reference author="U.S. Fish and Wildlife Service" year="1986" title="" journal="" identification=""/>
+							</references>
+							<valuesScalar>
+								<parameter input="0" output="0.0"/>
+								<parameter input="15" output="0.0"/>
+								<parameter input="40" output="1.0"/>
+								<parameter input="70" output="1.0"/>
+								<parameter input="90" output="0.0"/>
+								<parameter input="100" output="0.0"/>
+							</valuesScalar>
+						</Content>
+						<outputLayers>
+							<layer name="HSI_Flow_velocity_embryo">
+								<parameter_name>HSI_Flow_velocity_embryo</parameter_name>
+								<parameter_cat>HSI</parameter_cat>
+								<period>Undefined</period>
+								<position>Undefined</position>
+								<unit>factor</unit>
+								<statistic>average</statistic>
+								<layer_filename>HSI_Flow_velocity_embryo</layer_filename>
+								<description>Undefined</description>
+							</layer>
+						</outputLayers>
+					</ResponseCurve>
+					<ResponseCurve name="Vegetation_larvae">
+						<inputLayers>
+							<layer name="Vegetation_larvae">
+								<parameter_name>Vegetation_larvae</parameter_name>
+								<parameter_cat>Undefined</parameter_cat>
+								<period>Undefined</period>
+								<position>Undefined</position>
+								<unit>"%"</unit>
+								<statistic>average</statistic>
+								<layer_filename>Vegetation_larvae</layer_filename>
+								<description>Undefined</description>
+							</layer>
+						</inputLayers>
+						<Content>
+							<type>scalar</type>
+							<description>"Coverage of the waterbody by vegetation in percent."</description>
+							<author>"Marc Weeber"</author>
+							<date>2013-01-19</date>
+							<references>
+								<reference author="U.S. Fish and Wildlife Service" year="1986" title="" journal="" identification=""/>
+							</references>
+							<valuesScalar>
+								<parameter input="0" output="0.0"/>
+								<parameter input="15" output="1.0"/>
+								<parameter input="40" output="1.0"/>
+							</valuesScalar>
+						</Content>
+						<outputLayers>
+							<layer name="HSI_Vegetation_larvae">
+								<parameter_name>HSI_Vegetation_larvae</parameter_name>
+								<parameter_cat>HSI</parameter_cat>
+								<period>Undefined</period>
+								<position>Undefined</position>
+								<unit>factor</unit>
+								<statistic>average</statistic>
+								<layer_filename>HSI_Vegetation_larvae</layer_filename>
+								<description>Undefined</description>
+							</layer>
+						</outputLayers>
+					</ResponseCurve>
+					<ResponseCurve name="Vegetation_adult">
+						<inputLayers>
+							<layer name="Vegetation_adult">
+								<parameter_name>Vegetation_adult</parameter_name>
+								<parameter_cat>Undefined</parameter_cat>
+								<period>Undefined</period>
+								<position>Undefined</position>
+								<unit>"%"</unit>
+								<statistic>average</statistic>
+								<layer_filename>Vegetation_adult</layer_filename>
+								<description>Undefined</description>
+							</layer>
+						</inputLayers>
+						<Content>
+							<type>scalar</type>
+							<description>"Coverage of the waterbody by vegetation in percent."</description>
+							<author>"Marc Weeber"</author>
+							<date>2013-01-19</date>
+							<references>
+								<reference author="U.S. Fish and Wildlife Service" year="1986" title="" journal="" identification=""/>
+							</references>
+							<valuesScalar>
+								<parameter input="0" output="0.0"/>
+								<parameter input="34" output="1.0"/>
+								<parameter input="40" output="1.0"/>
+							</valuesScalar>
+						</Content>
+						<outputLayers>
+							<layer name="HSI_Vegetation_adult">
+								<parameter_name>HSI_Vegetation_adult</parameter_name>
+								<parameter_cat>HSI</parameter_cat>
+								<period>Undefined</period>
+								<position>Undefined</position>
+								<unit>factor</unit>
+								<statistic>average</statistic>
+								<layer_filename>HSI_Vegetation_adult</layer_filename>
+								<description>Undefined</description>
+							</layer>
+						</outputLayers>
+					</ResponseCurve>
+					<ResponseCurve name="Substrate_A">
+						<inputLayers>
+							<layer name="Substrate_A">
+								<parameter_name>Substrate_A</parameter_name>
+								<parameter_cat>Undefined</parameter_cat>
+								<period>Undefined</period>
+								<position>Undefined</position>
+								<unit>"%"</unit>
+								<statistic>average</statistic>
+								<layer_filename>Substrate_A</layer_filename>
+								<description>Undefined</description>
+							</layer>
+						</inputLayers>
+						<Content>
+							<type>scalar</type>
+							<description>"Coverage by substrate with a size between 1 and 7 cm in percent, when the coverage lower than 5% one should use Substrate_B."</description>
+							<author>"Marc Weeber"</author>
+							<date>2013-01-19</date>
+							<references>
+								<reference author="U.S. Fish and Wildlife Service" year="1986" title="" journal="" identification=""/>
+							</references>
+							<valuesScalar>
+								<parameter input="0" output="0.0"/>
+								<parameter input="2" output="0.7"/>
+								<parameter input="5" output="1.0"/>
+							</valuesScalar>
+						</Content>
+						<outputLayers>
+							<layer name="HSI_Substrate_A">
+								<parameter_name>HSI_Substrate_A</parameter_name>
+								<parameter_cat>HSI</parameter_cat>
+								<period>Undefined</period>
+								<position>Undefined</position>
+								<unit>factor</unit>
+								<statistic>average</statistic>
+								<layer_filename>HSI_Substrate_A</layer_filename>
+								<description>Undefined</description>
+							</layer>
+						</outputLayers>
+					</ResponseCurve>
+					<ResponseCurve name="Substrate_B">
+						<inputLayers>
+							<layer name="Substrate_B">
+								<parameter_name>Substrate_B</parameter_name>
+								<parameter_cat>Undefined</parameter_cat>
+								<period>Undefined</period>
+								<position>Undefined</position>
+								<unit>"%"</unit>
+								<statistic>average</statistic>
+								<layer_filename>Substrate_B</layer_filename>
+								<description>Undefined</description>
+							</layer>
+						</inputLayers>
+						<Content>
+							<type>scalar</type>
+							<description>"Coverage by substrate with a size between 0.3 and 1 cm and between 7 and 10 cm in percent, use a weighted average of the coverage of Substrate_A and Substrate_B to calculate the suitability."</description>
+							<author>"Marc Weeber"</author>
+							<date>2013-01-19</date>
+							<references>
+								<reference author="U.S. Fish and Wildlife Service" year="1986" title="" journal="" identification=""/>
+							</references>
+							<valuesScalar>
+								<parameter input="0" output="0.0"/>
+								<parameter input="2" output="0.7"/>
+								<parameter input="5" output="1.0"/>
+							</valuesScalar>
+						</Content>
+						<outputLayers>
+							<layer name="HSI_Substrate_B">
+								<parameter_name>HSI_Substrate_B</parameter_name>
+								<parameter_cat>HSI</parameter_cat>
+								<period>Undefined</period>
+								<position>Undefined</position>
+								<unit>factor</unit>
+								<statistic>average</statistic>
+								<layer_filename>HSI_Substrate_B</layer_filename>
+								<description>Undefined</description>
+							</layer>
+						</outputLayers>
+					</ResponseCurve>
+					<ResponseCurve name="Substrate_class">
+						<inputLayers>
+							<layer name="Substrate_class">
+								<parameter_name>Substrate_class</parameter_name>
+								<parameter_cat>Undefined</parameter_cat>
+								<period>Undefined</period>
+								<position>Undefined</position>
+								<unit>"%"</unit>
+								<statistic>average</statistic>
+								<layer_filename>Substrate_class</layer_filename>
+								<description>Undefined</description>
+							</layer>
+						</inputLayers>
+						<Content>
+							<type>scalar</type>
+							<description>"Coverage by substrate with a size between 10 and 40 cm in percent."</description>
+							<author>"Marc Weeber"</author>
+							<date>2013-01-19</date>
+							<references>
+								<reference author="U.S. Fish and Wildlife Service" year="1986" title="" journal="" identification=""/>
+							</references>
+							<valuesScalar>
+								<parameter input="0" output="0.0"/>
+								<parameter input="10" output="1.0"/>
+								<parameter input="20" output="1.0"/>
+							</valuesScalar>
+						</Content>
+						<outputLayers>
+							<layer name="HSI_Substrate_class">
+								<parameter_name>HSI_Substrate_class</parameter_name>
+								<parameter_cat>HSI</parameter_cat>
+								<period>Undefined</period>
+								<position>Undefined</position>
+								<unit>factor</unit>
+								<statistic>average</statistic>
+								<layer_filename>HSI_Substrate_class</layer_filename>
+								<description>Undefined</description>
+							</layer>
+						</outputLayers>
+					</ResponseCurve>
+					<ResponseCurve name="Dominant_Substrate_type">
+						<inputLayers>
+							<layer name="Dominant_Substrate_type">
+								<parameter_name>Dominant_Substrate_type</parameter_name>
+								<parameter_cat>Undefined</parameter_cat>
+								<period>Undefined</period>
+								<position>Undefined</position>
+								<unit>"categorical"</unit>
+								<statistic>average</statistic>
+								<layer_filename>Dominant_Substrate_type</layer_filename>
+								<description>Undefined</description>
+							</layer>
+						</inputLayers>
+						<Content>
+							<type>categorical</type>
+							<description>"Dominant type of substrate."</description>
+							<author>"Marc Weeber"</author>
+							<date>2013-01-19</date>
+							<references>
+								<reference author="U.S. Fish and Wildlife Service" year="1986" title="" journal="" identification=""/>
+							</references>
+							<valuesCategorical>
+								<parameter input="1" input_cat="Rubble, small boulders or aquatic vegetation" output="0.7" output_cat=""/>
+								<parameter input="2" input_cat="Rubble, gravel, pebbles and fine sediment in equal quantities, with or without aquatic plants" output="1.0" output_cat=""/>
+								<parameter input="3" input_cat="Fine sediment, rocky soil, fine gravel or large boulders are dominant" output="0.7" output_cat=""/>
+							</valuesCategorical>
+						</Content>
+						<outputLayers>
+							<layer name="HSI_Dominant_Substrate_type">
+								<parameter_name>HSI_Dominant_Substrate_type</parameter_name>
+								<parameter_cat>HSI</parameter_cat>
+								<period>Undefined</period>
+								<position>Undefined</position>
+								<unit>factor</unit>
+								<statistic>average</statistic>
+								<layer_filename>HSI_Dominant_Substrate_type</layer_filename>
+								<description>Undefined</description>
+							</layer>
+						</outputLayers>
+					</ResponseCurve>
+					<ResponseCurve name="Coverage_ponds">
+						<inputLayers>
+							<layer name="Coverage_ponds">
+								<parameter_name>Coverage_ponds</parameter_name>
+								<parameter_cat>Undefined</parameter_cat>
+								<period>Undefined</period>
+								<position>Undefined</position>
+								<unit>"%"</unit>
+								<statistic>average</statistic>
+								<layer_filename>Coverage_ponds</layer_filename>
+								<description>Undefined</description>
+							</layer>
+						</inputLayers>
+						<Content>
+							<type>scalar</type>
+							<description>"Coverage by ponds in the shallow water period in percent."</description>
+							<author>"Marc Weeber"</author>
+							<date>2013-01-19</date>
+							<references>
+								<reference author="U.S. Fish and Wildlife Service" year="1986" title="" journal="" identification=""/>
+							</references>
+							<valuesScalar>
+								<parameter input="0" output="0.1"/>
+								<parameter input="25" output="0.6"/>
+								<parameter input="50" output="1.0"/>
+								<parameter input="70" output="1.0"/>
+								<parameter input="100" output="0.5"/>
+							</valuesScalar>
+						</Content>
+						<outputLayers>
+							<layer name="HSI_Coverage_ponds">
+								<parameter_name>HSI_Coverage_ponds</parameter_name>
+								<parameter_cat>HSI</parameter_cat>
+								<period>Undefined</period>
+								<position>Undefined</position>
+								<unit>factor</unit>
+								<statistic>average</statistic>
+								<layer_filename>HSI_Coverage_ponds</layer_filename>
+								<description>Undefined</description>
+							</layer>
+						</outputLayers>
+					</ResponseCurve>
+					<ResponseCurve name="Bank_vegetation">
+						<inputLayers>
+							<layer name="Bank_vegetation">
+								<parameter_name>Bank_vegetation</parameter_name>
+								<parameter_cat>Undefined</parameter_cat>
+								<period>Undefined</period>
+								<position>Undefined</position>
+								<unit>"%"</unit>
+								<statistic>average</statistic>
+								<layer_filename>Bank_vegetation</layer_filename>
+								<description>Undefined</description>
+							</layer>
+						</inputLayers>
+						<Content>
+							<type>scalar</type>
+							<description>"Bank vegetation index in percent. Note: Only applicable to non-productive streams 15 meters wide or less # 1. Vegetation index = 2 (shrubs) + 1.5 (grasses) + (trees)."</description>
+							<author>"Marc Weeber"</author>
+							<date>2013-01-19</date>
+							<references>
+								<reference author="U.S. Fish and Wildlife Service" year="1986" title="" journal="" identification=""/>
+							</references>
+							<valuesScalar>
+								<parameter input="0" output="0.08"/>
+								<parameter input="20" output="0.08"/>
+								<parameter input="100" output="0.85"/>
+								<parameter input="140" output="1.0"/>
+								<parameter input="300" output="1.0"/>
+							</valuesScalar>
+						</Content>
+						<outputLayers>
+							<layer name="HSI_Bank_vegetation">
+								<parameter_name>HSI_Bank_vegetation</parameter_name>
+								<parameter_cat>HSI</parameter_cat>
+								<period>Undefined</period>
+								<position>Undefined</position>
+								<unit>factor</unit>
+								<statistic>average</statistic>
+								<layer_filename>HSI_Bank_vegetation</layer_filename>
+								<description>Undefined</description>
+							</layer>
+						</outputLayers>
+					</ResponseCurve>
+					<ResponseCurve name="Bank_stability">
+						<inputLayers>
+							<layer name="Bank_stability">
+								<parameter_name>Bank_stability</parameter_name>
+								<parameter_cat>Undefined</parameter_cat>
+								<period>Undefined</period>
+								<position>Undefined</position>
+								<unit>"%"</unit>
+								<statistic>average</statistic>
+								<layer_filename>Bank_stability</layer_filename>
+								<description>Undefined</description>
+							</layer>
+						</inputLayers>
+						<Content>
+							<type>scalar</type>
+							<description>"The share of roots and rocky bank cover in percent."</description>
+							<author>"Marc Weeber"</author>
+							<date>2013-01-19</date>
+							<references>
+								<reference author="U.S. Fish and Wildlife Service" year="1986" title="" journal="" identification=""/>
+							</references>
+							<valuesScalar>
+								<parameter input="0" output="0.2"/>
+								<parameter input="30" output="0.35"/>
+								<parameter input="50" output="0.8"/>
+								<parameter input="65" output="0.95"/>
+								<parameter input="75" output="1.0"/>
+								<parameter input="100" output="1.0"/>
+							</valuesScalar>
+						</Content>
+						<outputLayers>
+							<layer name="HSI_Bank_stability">
+								<parameter_name>HSI_Bank_stability</parameter_name>
+								<parameter_cat>HSI</parameter_cat>
+								<period>Undefined</period>
+								<position>Undefined</position>
+								<unit>factor</unit>
+								<statistic>average</statistic>
+								<layer_filename>HSI_Bank_stability</layer_filename>
+								<description>Undefined</description>
+							</layer>
+						</outputLayers>
+					</ResponseCurve>
+					<ResponseCurve name="Acidity">
+						<inputLayers>
+							<layer name="Acidity">
+								<parameter_name>Acidity</parameter_name>
+								<parameter_cat>Undefined</parameter_cat>
+								<period>Undefined</period>
+								<position>Undefined</position>
+								<unit>"pH"</unit>
+								<statistic>average</statistic>
+								<layer_filename>Acidity</layer_filename>
+								<description>Undefined</description>
+							</layer>
+						</inputLayers>
+						<Content>
+							<type>scalar</type>
+							<description>"Average pH value during the growing season."</description>
+							<author>"Marc Weeber"</author>
+							<date>2013-01-19</date>
+							<references>
+								<reference author="U.S. Fish and Wildlife Service" year="1986" title="" journal="" identification=""/>
+							</references>
+							<valuesScalar>
+								<parameter input="0" output="0.0"/>
+								<parameter input="5" output="0.0"/>
+								<parameter input="6.8" output="1.0"/>
+								<parameter input="7.8" output="1.0"/>
+								<parameter input="9.5" output="0.0"/>
+								<parameter input="10" output="0.0"/>
+							</valuesScalar>
+						</Content>
+						<outputLayers>
+							<layer name="HSI_Acidity">
+								<parameter_name>HSI_Acidity</parameter_name>
+								<parameter_cat>HSI</parameter_cat>
+								<period>Undefined</period>
+								<position>Undefined</position>
+								<unit>factor</unit>
+								<statistic>average</statistic>
+								<layer_filename>HSI_Acidity</layer_filename>
+								<description>Undefined</description>
+							</layer>
+						</outputLayers>
+					</ResponseCurve>
+					<ResponseCurve name="Flow">
+						<inputLayers>
+							<layer name="Flow">
+								<parameter_name>Flow</parameter_name>
+								<parameter_cat>Undefined</parameter_cat>
+								<period>Undefined</period>
+								<position>Undefined</position>
+								<unit>"%"</unit>
+								<statistic>average</statistic>
+								<layer_filename>Flow</layer_filename>
+								<description>Undefined</description>
+							</layer>
+						</inputLayers>
+						<Content>
+							<type>scalar</type>
+							<description>"Late summer discharge compared to average discharge in percent."</description>
+							<author>"Marc Weeber"</author>
+							<date>2013-01-19</date>
+							<references>
+								<reference author="U.S. Fish and Wildlife Service" year="1986" title="" journal="" identification=""/>
+							</references>
+							<valuesScalar>
+								<parameter input="0" output="0.0"/>
+								<parameter input="50" output="1.0"/>
+								<parameter input="100" output="1.0"/>
+							</valuesScalar>
+						</Content>
+						<outputLayers>
+							<layer name="HSI_Flow">
+								<parameter_name>HSI_Flow</parameter_name>
+								<parameter_cat>HSI</parameter_cat>
+								<period>Undefined</period>
+								<position>Undefined</position>
+								<unit>factor</unit>
+								<statistic>average</statistic>
+								<layer_filename>HSI_Flow</layer_filename>
+								<description>Undefined</description>
+							</layer>
+						</outputLayers>
+					</ResponseCurve>
+					<ResponseCurve name="Pond_classification">
+						<inputLayers>
+							<layer name="Pond_classification">
+								<parameter_name>Pond_classification</parameter_name>
+								<parameter_cat>Undefined</parameter_cat>
+								<period>Undefined</period>
+								<position>Undefined</position>
+								<unit>"categorical"</unit>
+								<statistic>average</statistic>
+								<layer_filename>Pond_classification</layer_filename>
+								<description>Undefined</description>
+							</layer>
+						</inputLayers>
+						<Content>
+							<type>categorical</type>
+							<description>"Pond classification."</description>
+							<author>"Marc Weeber"</author>
+							<date>2013-01-19</date>
+							<references>
+								<reference author="U.S. Fish and Wildlife Service" year="1986" title="" journal="" identification=""/>
+							</references>
+							<valuesCategorical>
+								<parameter input="1" input_cat="More than 30% large and deep" output="1.0" output_cat=""/>
+								<parameter input="2" input_cat="Between 10% and 30% large and deep, more than 50% medium" output="0.6" output_cat=""/>
+								<parameter input="3" input_cat="Less than 10% large and deep, less than 50% medium" output="0.3" output_cat=""/>
+							</valuesCategorical>
+						</Content>
+						<outputLayers>
+							<layer name="HSI_Pond_classification">
+								<parameter_name>HSI_Pond_classification</parameter_name>
+								<parameter_cat>HSI</parameter_cat>
+								<period>Undefined</period>
+								<position>Undefined</position>
+								<unit>factor</unit>
+								<statistic>average</statistic>
+								<layer_filename>HSI_Pond_classification</layer_filename>
+								<description>Undefined</description>
+							</layer>
+						</outputLayers>
+					</ResponseCurve>
+					<ResponseCurve name="Fine_sediment_embryo">
+						<inputLayers>
+							<layer name="Fine_sediment_embryo">
+								<parameter_name>Fine_sediment_embryo</parameter_name>
+								<parameter_cat>Undefined</parameter_cat>
+								<period>Undefined</period>
+								<position>Undefined</position>
+								<unit>"%"</unit>
+								<statistic>average</statistic>
+								<layer_filename>Fine_sediment_embryo</layer_filename>
+								<description>Undefined</description>
+							</layer>
+						</inputLayers>
+						<Content>
+							<type>scalar</type>
+							<description>"Coverage by fine sediment smaller than 3 mm in percent."</description>
+							<author>"Marc Weeber"</author>
+							<date>2013-01-19</date>
+							<references>
+								<reference author="U.S. Fish and Wildlife Service" year="1986" title="" journal="" identification=""/>
+							</references>
+							<valuesScalar>
+								<parameter input="0" output="1.0"/>
+								<parameter input="5" output="1.0"/>
+								<parameter input="15" output="0.5"/>
+								<parameter input="30" output="0.2"/>
+								<parameter input="40" output="0.1"/>
+							</valuesScalar>
+						</Content>
+						<outputLayers>
+							<layer name="HSI_Fine_sediment_embryo">
+								<parameter_name>HSI_Fine_sediment_embryo</parameter_name>
+								<parameter_cat>HSI</parameter_cat>
+								<period>Undefined</period>
+								<position>Undefined</position>
+								<unit>factor</unit>
+								<statistic>average</statistic>
+								<layer_filename>HSI_Fine_sediment_embryo</layer_filename>
+								<description>Undefined</description>
+							</layer>
+						</outputLayers>
+					</ResponseCurve>
+					<ResponseCurve name="Fine_sediment_adult">
+						<inputLayers>
+							<layer name="Fine_sediment_adult">
+								<parameter_name>Fine_sediment_adult</parameter_name>
+								<parameter_cat>Undefined</parameter_cat>
+								<period>Undefined</period>
+								<position>Undefined</position>
+								<unit>"%"</unit>
+								<statistic>average</statistic>
+								<layer_filename>Fine_sediment_adult</layer_filename>
+								<description>Undefined</description>
+							</layer>
+						</inputLayers>
+						<Content>
+							<type>scalar</type>
+							<description>"Coverage by fine sediment smaller than 3 mm in percent."</description>
+							<author>"Marc Weeber"</author>
+							<date>2013-01-19</date>
+							<references>
+								<reference author="U.S. Fish and Wildlife Service" year="1986" title="" journal="" identification=""/>
+							</references>
+							<valuesScalar>
+								<parameter input="0" output="1.0"/>
+								<parameter input="10" output="1.0"/>
+								<parameter input="40" output="0.2"/>
+							</valuesScalar>
+						</Content>
+						<outputLayers>
+							<layer name="HSI_Fine_sediment_adult">
+								<parameter_name>HSI_Fine_sediment_adult</parameter_name>
+								<parameter_cat>HSI</parameter_cat>
+								<period>Undefined</period>
+								<position>Undefined</position>
+								<unit>factor</unit>
+								<statistic>average</statistic>
+								<layer_filename>HSI_Fine_sediment_adult</layer_filename>
+								<description>Undefined</description>
+							</layer>
+						</outputLayers>
+					</ResponseCurve>
+					<ResponseCurve name="Schadow">
+						<inputLayers>
+							<layer name="Schadow">
+								<parameter_name>Schadow</parameter_name>
+								<parameter_cat>Undefined</parameter_cat>
+								<period>Undefined</period>
+								<position>Undefined</position>
+								<unit>"%"</unit>
+								<statistic>average</statistic>
+								<layer_filename>Schadow</layer_filename>
+								<description>Undefined</description>
+							</layer>
+						</inputLayers>
+						<Content>
+							<type>scalar</type>
+							<description>"Shading of the stream between 10:00 and 14:00 in percent. Note: Only use for currents narrower than 50 meters and that are above 18 degrees Celsius."</description>
+							<author>"Marc Weeber"</author>
+							<date>2013-01-19</date>
+							<references>
+								<reference author="U.S. Fish and Wildlife Service" year="1986" title="" journal="" identification=""/>
+							</references>
+							<valuesScalar>
+								<parameter input="0" output="0.3"/>
+								<parameter input="50" output="1.0"/>
+								<parameter input="75" output="1.0"/>
+								<parameter input="85" output="0.9"/>
+								<parameter input="100" output="0.5"/>
+							</valuesScalar>
+						</Content>
+						<outputLayers>
+							<layer name="HSI_Schadow">
+								<parameter_name>HSI_Schadow</parameter_name>
+								<parameter_cat>HSI</parameter_cat>
+								<period>Undefined</period>
+								<position>Undefined</position>
+								<unit>factor</unit>
+								<statistic>average</statistic>
+								<layer_filename>HSI_Schadow</layer_filename>
+								<description>Undefined</description>
+							</layer>
+						</outputLayers>
+					</ResponseCurve>
+					<ResponseCurve name="Nitrate_concentration">
+						<inputLayers>
+							<layer name="Nitrate_concentration">
+								<parameter_name>Nitrate_concentration</parameter_name>
+								<parameter_cat>Undefined</parameter_cat>
+								<period>Undefined</period>
+								<position>Undefined</position>
+								<unit>mg/l</unit>
+								<statistic>average</statistic>
+								<layer_filename>Nitrate_concentration</layer_filename>
+								<description>Undefined</description>
+							</layer>
+						</inputLayers>
+						<Content>
+							<type>range / categorical</type>
+							<description>Nitrate or nitrogen concentration in milligrams per liter.</description>
+							<author>"Marc Weeber"</author>
+							<date>2013-01-15</date>
+							<references>
+								<reference author="Van der Winden, J., Dirksen, S., Poot, M.J.M." year="1996" title="" journal="" identification=""/>
+							</references>
+							<valuesRangeCategorical>
+								<parameter rangemin_input="0" rangemax_input="0" input_cat="0.00" output="0.0" output_cat=""/>
+								<parameter rangemin_input="0.00" rangemax_input="0.05" input_cat="0.00 - 0.05" output="0.25" output_cat=""/>
+								<parameter rangemin_input="0.05" rangemax_input="0.10" input_cat="0.05 - 0.10" output="0.5" output_cat=""/>
+								<parameter rangemin_input="0.10" rangemax_input="0.15" input_cat="0.10 - 0.15" output="0.75" output_cat=""/>
+								<parameter rangemin_input="0.15" rangemax_input="0.25" input_cat="0.15 - 0.25" output="1.0" output_cat=""/>
+								<parameter rangemin_input="0.25" rangemax_input="0.50" input_cat="0.25 - 0.50" output="0.75" output_cat=""/>
+								<parameter rangemin_input="0.50" rangemax_input="0.90" input_cat="0.50 - 0.90" output="0.5" output_cat=""/>
+								<parameter rangemin_input="0.90" rangemax_input="2.00" input_cat="0.90 - 2.00" output="0.25" output_cat=""/>
+								<parameter rangemin_input="2.00" rangemax_input="999999" input_cat="&gt; 2.00" output="0.0" output_cat=""/>
+							</valuesRangeCategorical>
+						</Content>
+						<outputLayers>
+							<layer name="HSI_Nitrate_concentration">
+								<parameter_name>HSI_Nitrate_concentration</parameter_name>
+								<parameter_cat>HSI</parameter_cat>
+								<period>Undefined</period>
+								<position>Undefined</position>
+								<unit>factor</unit>
+								<statistic>average</statistic>
+								<layer_filename>HSI_Nitrate_concentration</layer_filename>
+								<description>Undefined</description>
+							</layer>
+						</outputLayers>
+					</ResponseCurve>
+					<ResponseCurve name="Peak_discharge">
+						<inputLayers>
+							<layer name="Peak_discharge">
+								<parameter_name>Peak_discharge</parameter_name>
+								<parameter_cat>Undefined</parameter_cat>
+								<period>Undefined</period>
+								<position>Undefined</position>
+								<unit>"-"</unit>
+								<statistic>average</statistic>
+								<layer_filename>Peak_discharge</layer_filename>
+								<description>Undefined</description>
+							</layer>
+						</inputLayers>
+						<Content>
+							<type>scalar</type>
+							<description>"Average yearly peak discharge divided by the average daily discharge."</description>
+							<author>"Marc Weeber"</author>
+							<date>2013-01-19</date>
+							<references>
+								<reference author="U.S. Fish and Wildlife Service" year="1986" title="" journal="" identification=""/>
+							</references>
+							<valuesScalar>
+								<parameter input="1" output="0.5"/>
+								<parameter input="2" output="1.0"/>
+								<parameter input="2.8" output="1.0"/>
+								<parameter input="4.5" output="0.7"/>
+								<parameter input="6" output="0.2"/>
+							</valuesScalar>
+						</Content>
+						<outputLayers>
+							<layer name="HSI_Peak_discharge">
+								<parameter_name>HSI_Peak_discharge</parameter_name>
+								<parameter_cat>HSI</parameter_cat>
+								<period>Undefined</period>
+								<position>Undefined</position>
+								<unit>factor</unit>
+								<statistic>average</statistic>
+								<layer_filename>HSI_Peak_discharge</layer_filename>
+								<description>Undefined</description>
+							</layer>
+						</outputLayers>
+					</ResponseCurve>
+				</KnowledgeRules>
+			</System>
+		</ModelType>
+	</Autecology>
+	<TopicDescription>
+		<Description language="NL">
+			<text>&lt;h3 id="Bruineforel-Salmotrutta-Algemeenvoorkomen"&gt;Algemeen voorkomen&lt;/h3&gt;
+
+&lt;p&gt;De bruine forel (&lt;em&gt;Salmo trutta&lt;/em&gt;) komt van nature in Eurazië en het Noorden van Afrika voor. De verspreiding trekt zich van het vaste land naar zee en is gecentreerd rond de Middellandse zee, Caspische zee en Noordzee. Na 1883 heeft de bruine forel zich na introductie in Noord-Amerika gevestigd &lt;a href="https://publicwiki.deltares.nl/display/HBTHOME/Bruine+forel+-+Salmo+trutta#Bruineforel-Salmotrutta-1"&gt;#1&lt;/a&gt;. &lt;br&gt;
+De bruine forel is een vis die in meerdere vormen voorkomt, namelijk zeeforel (&lt;em&gt;Salmo trutta trutta&lt;/em&gt;), meerforel (&lt;em&gt;Salmo trutta lacustris&lt;/em&gt;) en de beekforel (&lt;em&gt;Salmo trutta fario&lt;/em&gt;) &lt;a href="https://publicwiki.deltares.nl/display/HBTHOME/Bruine+forel+-+Salmo+trutta#Bruineforel-Salmotrutta-1"&gt;#1&lt;/a&gt;&lt;a href="https://publicwiki.deltares.nl/display/HBTHOME/Bruine+forel+-+Salmo+trutta#Bruineforel-Salmotrutta-3"&gt;#3&lt;/a&gt;. Onderzoek heeft aangetoond dat de bruine forel zich afhankelijk van de omstandigheden, en de hiermee samenhangende wens om te migreren, als één van deze vormen kan ontwikkelen &lt;a href="https://publicwiki.deltares.nl/display/HBTHOME/Bruine+forel+-+Salmo+trutta#Bruineforel-Salmotrutta-3"&gt;#3&lt;/a&gt;. In dit habitatmodel zijn alleen de habitateisen opgenomen voor de periode dat de bruine forel in meren en beken verblijft.&lt;/p&gt;
+
+&lt;p&gt;In Nederland komt de bruine forel in de kustwateren, het IJsselmeer en de groter rivieren voor. De bruine forel trekt vanuit zee rivieren op om in zijriviertjes en beken te paren. Jonge bruine forellen kunnen na 1 a 2 jaar in zoetwater naar zee trekken, alwaar ze opgroeien tot volwassen zeeforellen. Tijdens de migratie naar zee verandert de jonge zeeforel van het parr stadium naar het smolt stadium. Hierbij maakt de bruine forel zowel een innerlijke als een uiterlijke verandering door. De forel verandert van zwarte vlekken op de flank naar compleet zilverkleurig &lt;a href="https://publicwiki.deltares.nl/display/HBTHOME/Bruine+forel+-+Salmo+trutta#Bruineforel-Salmotrutta-2"&gt;#2&lt;/a&gt;. Deze zilverkleurige forellen worden gerekend tot de vorm zeeforel. Zoals de naam al zegt trekken de meerforellen vanuit de beken en rivieren naar de meren. De beekforellen brengen hun hele leven in de beek door en deze worden gezien als de niet migrerende vorm van de bruine forel &lt;a href="https://publicwiki.deltares.nl/display/HBTHOME/Bruine+forel+-+Salmo+trutta#Bruineforel-Salmotrutta-3"&gt;#3&lt;/a&gt;. &lt;/p&gt;
+
+&lt;h3 id="Bruineforel-Salmotrutta-Voedselhabitatenstrategie"&gt;Voedselhabitat en strategie&lt;/h3&gt;
+
+&lt;p&gt;Jonge forellen eten ongewervelden, die ze zowel boven als onder water vangen. Volwassen forellen eten kleine vissen, amfibieën en zoogdieren, zoals muizen &lt;a href="https://publicwiki.deltares.nl/display/HBTHOME/Bruine+forel+-+Salmo+trutta#Bruineforel-Salmotrutta-2"&gt;#2&lt;/a&gt;. Volwassen forellen jagen voornamelijk ’s nachts &lt;a href="https://publicwiki.deltares.nl/display/HBTHOME/Bruine+forel+-+Salmo+trutta#Bruineforel-Salmotrutta-1"&gt;#1&lt;/a&gt;.&lt;/p&gt;
+
+&lt;h3 id="Bruineforel-Salmotrutta-Reproductieenmigratie"&gt;Reproductie en migratie&lt;/h3&gt;
+
+&lt;p&gt;De trek naar de paaigebieden wordt mogelijk bepaald door de afname van de dagduur, het toenemen van de stroming of de afname in watertemperatuur. De paai vindt plaats in nestkuilen gelegen in de grindbanken van snelstromende beken en kleine rivieren. Hier worden de eieren afgezet, waarna ze worden afgedekt met een klein laagje grind. Deze grindbanken worden gekarakteriseerd door het opwellen van grondwater en/of neerwaarts gerichte waterstromen. Dit zorgt circulatie van water tussen het grind, waardoor er geen sedimentlaagje over de eieren kan vormen &lt;a href="https://publicwiki.deltares.nl/display/HBTHOME/Bruine+forel+-+Salmo+trutta#Bruineforel-Salmotrutta-1"&gt;#1&lt;/a&gt;. &lt;/p&gt;
+
+&lt;p&gt;Na de uitkomst zoeken de larvale forellen een beschutte plaats om op te groeien &lt;a href="https://publicwiki.deltares.nl/display/HBTHOME/Bruine+forel+-+Salmo+trutta#Bruineforel-Salmotrutta-2"&gt;#2&lt;/a&gt;. De larven verspreiden zich binnen een week na uitkomen over het geschikte habitat. Hier verblijven ze één levensjaar. Tijdens dit levensjaar vindt er veel sterfte plaats door intraspecifiek territoriaal gedrag &lt;a href="https://publicwiki.deltares.nl/display/HBTHOME/Bruine+forel+-+Salmo+trutta#Bruineforel-Salmotrutta-1"&gt;#1&lt;/a&gt;. Hierna kan de jonge forel afhankelijk van de omstandigheden richting een meer of de zee trekken, waar zij twee levensjaren doorbrengen. In zee trekken de jonge forellen op in scholen &lt;a href="https://publicwiki.deltares.nl/display/HBTHOME/Bruine+forel+-+Salmo+trutta#Bruineforel-Salmotrutta-1"&gt;#1&lt;/a&gt;. &lt;/p&gt;
+
+&lt;p&gt;De forel kan in het derde of vijfde levensjaar deelnemen aan de voortplanting. Volwassen forellen kunnen 13 jaar oud worden en een lengte van 30 cm bereiken &lt;a href="https://publicwiki.deltares.nl/display/HBTHOME/Bruine+forel+-+Salmo+trutta#Bruineforel-Salmotrutta-1"&gt;#1&lt;/a&gt;.&lt;/p&gt;
+
+&lt;h3 id="Bruineforel-Salmotrutta-Milieuvoorwaarden"&gt;Milieuvoorwaarden&lt;/h3&gt;
+
+&lt;p&gt;Voor de bruine forel is de watertemperatuur de meest bepalende factor voor hun verspreiding. Waterstromen met veel schaduw en koude bronnen hebben de voorkeur, vanwege een constante en lage watertemperatuur. In kleine stromen is hierom de nabijheid van bomen van belang, voornamelijk op hete zomerdagen. In grotere stromen en meren helpt een groter volume aan water en de waterdiepte de afwezigheid van schaduw te compenseren. Ook het prooiaanbod is hoger bij een lage en constante temperatuur &lt;a href="https://publicwiki.deltares.nl/display/HBTHOME/Bruine+forel+-+Salmo+trutta#Bruineforel-Salmotrutta-1"&gt;#1&lt;/a&gt;.&lt;/p&gt;
+
+&lt;p&gt;Alle levensfases van de forel hebben een sterke behoefte aan voldoende opgelost zuurstof. De behoefte varieert echter tussen de verschillende levensfases, maar wordt ook beïnvloed door de zuurgraad, watertemperatuur, activiteit van de forel en de hoeveelheid zwevende stof. Daarnaast heeft een lage zuurgraad een negatief effect op het voedselaanbod, de groei en de maximale leeftijd van de forel &lt;a href="https://publicwiki.deltares.nl/display/HBTHOME/Bruine+forel+-+Salmo+trutta#Bruineforel-Salmotrutta-1"&gt;#1&lt;/a&gt;.&lt;/p&gt;
+
+&lt;p&gt;Oevervegetatie zorgt ervoor dat erosie niet plaats kan vinden. Erosie zorgt voor fijn sediment, wat een negatief effect heeft op het overleven van het embryo, de voedselproductie en de dekking in de vorm van groot substraat en waterplanten &lt;a class="unresolved" href="https://publicwiki.deltares.nl/display/HBTHOME/Bruine+forel+-+Salmo+trutta#"&gt;1&lt;/a&gt;.  Sterke veranderingen in de stroming kunnen ook een negatief effect hebben op het embryo. Door een laag debiet kunnen stromen droogvallen of bevriezen en bij een hoge afvoer kan het grind gaan verschuiven &lt;a href="https://publicwiki.deltares.nl/display/HBTHOME/Bruine+forel+-+Salmo+trutta#Bruineforel-Salmotrutta-1"&gt;#1&lt;/a&gt;. &lt;/p&gt;
+
+&lt;p&gt;In stromen met een sterk gradiënt komt het meeste eetbare materiaal van landplanten en landinsecten. Naarmate het gradiënt afneemt neemt het aantal invertebraten rond stenige oevers toe. Benedenstrooms daalt de stroomsnelheid en substraatgrootte, echter het aantal poelen ten opzichte van stenige oevers, de watertemperatuur, productiviteit van het systeem en de diversiteit in insecten nemen over het algemeen toe. Zowel de larvale en de juvenile forellen hebben een voorkeur voor poelen, een lagere stroomsnelheid (15 cm/s) en rotsachtig substraat. Daarnaast is voor larvale forellen beschutting erg belangrijk. Die zoeken ze in het grindbed. Hierin brengen zij de winter door. Juveniele forel geeft de voorkeur aan water dieper dan 15 cm. Volwassen beekforellen worden voornamelijk aangetroffen bij hogere stroomsnelheden en dieper water. Bij de meerforel wordt het optimale habitat gekenmerkt door helder, koel tot koud, oligotroof water met een grote waterdiepte. De afmetingen van het meer en de chemische kwaliteit mogen hierbij variëren &lt;a href="https://publicwiki.deltares.nl/display/HBTHOME/Bruine+forel+-+Salmo+trutta#Bruineforel-Salmotrutta-1"&gt;#1&lt;/a&gt;.&lt;/p&gt;
+
+&lt;p&gt;Volwassen forellen in waterstromen hebben een sterke behoefte aan beschutting. Deze beschutting wordt verkregen door ondergedoken vegetatie, overhangende vegetatie en objecten in de waterkolom. Deze vegetatie en de objecten remmen de stroomsnelheid. In deze luwe delen wordt door de forellen naar voedsel gezocht en gerust &lt;a href="https://publicwiki.deltares.nl/display/HBTHOME/Bruine+forel+-+Salmo+trutta#Bruineforel-Salmotrutta-1"&gt;#1&lt;/a&gt;. In de winter trekken de volwassen forellen naar diep en luw water, zoals meren en grotere rivieren. In de winterperiode is ook in dieper water de behoefte aan beschutting groot &lt;a href="https://publicwiki.deltares.nl/display/HBTHOME/Bruine+forel+-+Salmo+trutta#Bruineforel-Salmotrutta-1"&gt;#1&lt;/a&gt;.&lt;/p&gt;</text>
+		</Description>
+	</TopicDescription>
+	<Documentation>
+		<reference author="U.S. Fish and Wildlife Service" year="1986" title="HABITAT SUITABILITY INDEX MODELS AND INSTREAM FLOW SUITABILITY CURVES: BROWN TROUT" journal="" identification="Biological Report 82, 10.124, Revised, september 1986"/>
+		<reference author="" year="2012" title=" www.ravon.nl (Forel)" journal="" identification="18 december 2012"/>
+		<reference author="Van Emmerik, W.A.M., De Nie, H.W." year="2006" title="De zoetwatervissen van Nederland. Ecologisch bekeken." journal="" identification="Sportvisserij Nederland, Bilthoven."/>
+	</Documentation>
+	<DataSources/>
+</AutecologyXML>

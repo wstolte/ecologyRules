@@ -1,18 +1,14 @@
 
 source("ae.R")
 
-knowledgeRuleDir <- "d:\\Projects\\check_outs\\KnowledgeRules\\_knowledgerules\\"
 knowldedgeRuleDir <- "data/_knowledgerules"
 
 # schema <- xml2::read_xml("n:/Projects/11203500/11203758/B. Measurements and calculations/005- habitat modeling/EcologischeDatabase/github_setup/XMLSchema/AutecologyXML.xsd")
-testfile = file.path(knowldedgeRuleDir, "species", "Fish", "Barbus barbus.xml")
-testfile = file.path(knowldedgeRuleDir, "species", "Macrofytes", "Chara spp.xml")
-#testfile = file.path(knowledgeRuleDir, "species", "Fish", "Barbus barbus.xml")
+testfile = file.path(knowledgeRuleDir, "species", "Fish", "Barbus_barbus.xml")
+testfile = file.path(knowledgeRuleDir, "species", "Macrofytes", "Chara_spp.xml")
 #testfile = file.path(knowledgeRuleDir, "species", "Molluscs","Dreissena_polymorpha.xml")
 # testfile = file.path(knowledgeRuleDir, "species", "Macrophytes","Chara spp.xml")
-# n:\Projects\11203500\11203758\B. Measurements and calculations\005- habitat modeling\EcologischeDatabase\github_setup\_knowledgerules\species\Macrofytes\Chara spp.xml
-# d:\Projects\EcologischeKennisregels\ecoRules\data\_knowledgerules\species\Fish\Barbus barbus.xml
-
+testfile
 ae <- read_ae_xml(testfile)
 # xml2::xml_validate(ae, schema) # does not work anymore, because the xml is stripped from namespaces in the read function
 
@@ -24,6 +20,8 @@ get_element_contentdescription(ae)
 get_element_speciesname(ae) # moet geen element zijn
 get_element_ModelType(ae)
 get_element_ModelTypeNames(ae)
+
+scan(ae, systemname = "Voortplanting Barbeel (grindbedden)")
 
 get_system_names(ae, "HSI")
 get_element_system(ae, "HSI")
