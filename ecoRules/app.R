@@ -248,6 +248,10 @@ body    <- dashboardBody(
                               p("Presentation of system"),
                               htmlOutput("systemDescription")
                      ),
+                     tabPanel("Flow diagram",
+                              p("Presentation of flow diagram"),
+                              htmlOutput("flowDiagram")         
+                     ),
                      tabPanel("Knowledge rules",  
                               p("Presentation of knowledge rules"),
                               fluidRow(
@@ -414,7 +418,7 @@ server <- function(input, output, session) {
   
   output$systemDescription <- renderUI({
     req(actual_ae(), input$modeltype)
-    get_system_description(actual_ae(), input$modeltype) %>%
+    get_system_description(actual_ae(), input$modeltype, input$system) %>%
       htmltools::HTML()
   })
   

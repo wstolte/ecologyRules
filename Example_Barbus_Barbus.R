@@ -15,7 +15,14 @@ get_system_names(ae, "HSI")
 
 #Scan the file to read in the model (not complete yet)
 barbus_model <- scan(ae, modelname = "HSI", systemname = "Voortplanting Barbeel (grindbedden)")
-get_system_description(ae, modelname = "HSI", systemname = "Voortplanting Barbeel (grindbedden)")
+test = get_system_description(ae, modelname = "HSI", systemname = "Voortplanting Barbeel (grindbedden)")
+
+#Get an overview of the flowdiagrams
+get_flowdiagram_names(ae,"HSI","Voortplanting Barbeel (grindbedden)")
+fd_element = get_element_flowdiagram(ae,"HSI","Voortplanting Barbeel (grindbedden)", flowdiagramname = "adult")
+flowdiagram_data <- get_data_flowdiagram(fd_element)
+make_flowdiagram(flowdiagram_data)
+
 
 #Get an overview of all knowledgerules and knowledgerule types available
 get_all_knowledgeruleNames(ae = ae, modeltype = "HSI", system = "Voortplanting Barbeel (grindbedden)") %>% 

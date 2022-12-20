@@ -229,14 +229,33 @@ get_element_system <- function(ae, modeltype) {
     xml2::xml_find_all(xpath = ".//System")
 }
 
-
+#' gets system names  from autoecology xml object
+#'
+#' @param ae autoecology xml object
+#' @param modeltype name of modeltype
+#' @return A vector with system names
+#' @examples
+#' get_system_names(ae = ae, modeltype = "HSI")
 get_system_names <- function(ae, modeltype) {
   get_element_ModelType(ae)[which(get_element_ModelType(ae) %>% xml2::xml_attrs() %>% map_chr("name") == modeltype)] %>% 
     xml2::xml_find_all(xpath = ".//System") %>%
     xml2::xml_attrs() %>% map_chr("name")
 }
 
-
+#' gets system names  from autoecology xml object
+#'
+#' @param ae autoecology xml object
+#' @param modeltype name of modeltype
+#' @param system name of system
+#' @return A vector with flowdiagram names
+#' @examples
+#' get_system_names(ae = ae, modeltype = "HSI", system = "Voortplanting Barbeel (grindbedden)")
+get_flowdiagram_names <- function(ae, modeltype,system) {
+  nametag = ae_xpath_attr_build(".//System", system)
+  get_element_system(ae, modeltype) %>% xml2::xml_parent() %>% xml2::xml_find_first(nametag) %>%
+    xml_find_first(xpath = ".//SystemFlowDiagrams") %>% xml2::xml_find_all(xpath = ".//FlowDiagram") %>%
+    xml2::xml_attrs() %>% map_chr("name")
+}
 
 #' gets element knowledgerules  from autoecology xml object
 #'
@@ -345,14 +364,14 @@ get_responsecurve_keys <- function(ae, knowledgerule) {
 #'
 #' @param ae autoecology xml object
 #' @param modelname name of model
-#' @param systemname name of system
+#' @param system name of system
 #' @param rcname name of response curve
 #' @return An xml element knowledge rules
 #' @examples
 #' get_element_response_curve(ae, "testmodel","testresponsecurve")
-get_element_response_curve <- function(ae, modelname = "HSI", systemname, rcname){
+get_element_response_curve <- function(ae, modelname = "HSI", system, rcname){
   ae %>%
-    get_element_knowledgerules(modelname, systemname) %>% 
+    get_element_knowledgerules(modelname, system) %>% 
     xml_children() %>% 
     xml_find_all(
       xpath = ae_xpath_attr_build(path = "//ResponseCurve", rcname)
@@ -363,14 +382,14 @@ get_element_response_curve <- function(ae, modelname = "HSI", systemname, rcname
 #'
 #' @param ae autoecology xml object
 #' @param modelname name of model
-#' @param systemname name of system
+#' @param system name of system
 #' @param fbname name of formula based
 #' @return An xml element knowledge rules
 #' @examples
 #' get_element_formula_based(ae, "testmodel","testformulabased")
-get_element_formula_based <- function(ae, modelname = "HSI", systemname, fbname){
+get_element_formula_based <- function(ae, modelname = "HSI", system, fbname){
   ae %>%
-    get_element_knowledgerules(modelname,systemname) %>% 
+    get_element_knowledgerules(modelname,system) %>% 
     xml_children() %>% 
     xml_find_all(
       xpath = ae_xpath_attr_build(path = "//FormulaBased", fbname)
@@ -431,11 +450,11 @@ get_data_content <- function(ae){
 #'
 #' @param ae autoecology xml object
 #' @param modelname name of model
-#' @param systemname name of system
+#' @param system name of system
 #' @return A list with the content data
 #' @examples
 #' get_system_description(ae)
-get_system_description <- function(ae, modelname, systemname){
+get_system_description <- function(ae, modelname, system){
   nametag = ae_xpath_attr_build(".//System", system)
   tse <- get_element_system(ae, "HSI") %>% xml2::xml_parent() %>% xml2::xml_find_first(nametag) %>%
     xml_find_first(xpath = ".//SystemDescription")
@@ -458,6 +477,115 @@ get_system_description <- function(ae, modelname, systemname){
   }
   return(sysdescr_df[1,"Description"])
 }
+
+#' gets system description content  from autoecology xml object
+#'
+#' @param ae autoecology xml object
+#' @param modelname name of model
+#' @param system name of system
+#' @param flowdiagramname name of flowdiagram
+#' @return A list with the content data
+#' @examples
+#' get_element_flowdiagram(ae, modeltype = "HSI", system = "Voortplanting Barbeel (grindbedden)", 
+#'                         flowdiagramname = "adult")
+get_element_flowdiagram <- function(ae, modelname, system, flowdiagramname){
+  nametag_sys = ae_xpath_attr_build(".//System", system)
+  nametage_fd = ae_xpath_attr_build(".//FlowDiagram", flowdiagramname)
+  fde <- get_element_system(ae, modelname) %>% xml2::xml_parent() %>% xml2::xml_find_first(nametag_sys) %>%
+    xml_find_first(xpath = ".//SystemFlowDiagrams") %>% xml2::xml_find_first(nametage_fd)
+  return(fde)
+}
+
+
+#' gets datastructure as list  from flowdiagram xml object
+#'
+#' @param fd_element flowdiagram xml object
+#' @return A list with the content data
+#' @examples
+#' get_data_flowdiagram(fd_element)
+get_data_flowdiagram <- function(fd_element){
+  flowdiagram_name = fd_element %>% xml2::xml_attrs() %>% map_chr("name")
+  from_overview = list()
+  linklist = list()
+  for(fromlink in fd_element %>% xml2::xml_children()){
+    name = fromlink %>% xml_attr("name")
+    label = fromlink %>% xml_child(search = "label") %>% xml_text(trim = TRUE)
+    equation = fromlink %>% xml_child(search = "equation") %>% xml_text(trim = TRUE)
+    data = list(name, label, equation)
+    names(data) <- c("name","label","equation")
+
+    store_links = c()
+    if(equation == "knowledge_rule"){
+      nr = 0
+      for(tolink in fromlink %>% xml2::xml_find_all(xpath = ".//To")){
+        nr = nr + 1
+        if(nr == 1){
+          knowledge_ruleTo = tolink %>% xml_text(trim = TRUE)
+        }else{
+          store_links = c(store_links, tolink %>% xml_text(trim = TRUE))
+        }
+      }
+      data = append(data,list(c(store_links, knowledge_ruleTo)))
+      names(data)[4] <- "to"
+                       
+    }else{
+      for(tolink in fromlink %>% xml2::xml_find_all(xpath = ".//To")){
+        store_links = c(store_links, tolink %>% xml_text(trim = TRUE))
+      }
+      data = append(data,list(store_links))
+      names(data)[4] <- "to"
+    }
+    list_data <- list(data)
+    names(list_data) <- name
+    fromdata =  list(flowdiagram_name, list_data)
+    linklist = append(linklist,fromdata)
+  }
+  names(fromdata) <- c("diagram_name","Links")
+  from_overview = append(flowdiagram_name,linklist)
+  return(from_overview)
+}
+
+#' make flowdiagram from flowdiagram datastructure
+#'
+#' @param fd_data flowdiagram list object
+#' @return A figure of the flowdiagram
+#' @examples
+#' make_flowdiagram(fd_data)
+make_flowdiagram <- function(fd_data){
+  require(DiagrammeR)
+  
+  #make connections
+  
+  from_links <- sapply(fd_data[[2:]],"[[",2)
+  statistic <- sapply(fd_data, "[[", 3)
+  to_links <- sapply(fd_data[[2:]],"[[",4)
+  
+  dataframe_flowdiagram = data.frame(From = character(),To = character())
+  nr = 0
+  for(to_link_coll in to_links){
+    nr = nr + 1
+    from_link_coll <- rep(from_links[nr],lenght(to_link_coll))
+    add_dataframe <- data.frame(From = from_link_coll, To = to_link_coll)
+    dataframe_flowdiagram = rbind(dataframe_flowdiagram,add_dataframe)
+  }
+  
+  dataframe_flowdiagram$Connection <- paste(dataframe_flowdiagram$From,
+                                            "-->"dataframe_flowdiagram$To)
+
+  DiagrammeR(
+    paste0(
+      paste0("graph TD;", "\n"),
+      paste(dataframe_flowdiagram$Connections, collapse = "\n"),"\n",
+      "classDef column fill:#0001CC, stroke:#0D3FF3, stroke-width:1px;" ,"\n",
+      "class ", paste0(1:length(connections), collapse = ","), " column;"
+    )
+  )
+}
+
+
+
+
+
 
 #' gets data response curve  from autoecology xml object
 #'
@@ -693,10 +821,10 @@ get_element_modeldescription <- function(ae, modelname) {
 #'
 #' @param ae autoecology xml object
 #' @modelname name of model
-#' @parem systemname name of system 
+#' @parem system name of system 
 #' @return An xml structure containing ecological knowledge rules for a species
 #' @examples
-scan <- function(ae, modelname, systemname){
+scan <- function(ae, modelname, system){
   if(length(get_element_parameter(ae)) > 0){
     parameter_root = get_element_parameter(ae)
     commonname = parameter_root %>% xml2::xml_find_all(".//CommonNames") %>%
@@ -746,7 +874,7 @@ scan <- function(ae, modelname, systemname){
     print(paste0("Commonname : language = ",xml_attr(name, "language"),", name = ",xml_attr(name, "name")))
   }
   
-  type_tag_krs = get_element_knowledgerules(ae, model= modelname, system = systemname)
+  type_tag_krs = get_element_knowledgerules(ae, model= modelname, system = system)
   
   #create flowdiagram
   
